@@ -22,7 +22,7 @@ jobs:
 
     - name: Build and start Docker Compose services
       run: |
-        make init
+        make github-init
 
     - name: Run check
       run: |
