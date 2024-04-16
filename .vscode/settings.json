@@ -1,0 +1,41 @@
+{
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+
+  // python
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.rulers": [88],
+    "editor.tabSize": 4
+  },
+  "black-formatter.args": ["--line-length", "88"],
+  "flake8.args": ["--max-line-length=88", "--ignore=E203,W503,W504"],
+
+  // .venvのパスをvscodeに追加
+  // admin-apiが優先的に読み込まれることに注意
+  // もし、user-apiのパッケージを使いたい場合は、コメントアウトで対応するか、user-apiをvscodeで開いて対応する
+  "python.analysis.extraPaths": [
+    "apps/admin-api/.venv/lib/python3.10/site-packages",
+    "apps/user-api/.venv/lib/python3.10/site-packages"
+  ],
+
+  // ファイル
+  "search.exclude": {
+    //   "**/.git": true,
+    //   "**/.venv/**": true,
+    //   "apps/scientist/.venv/**": true,
+    //   "apps/streamlit/.venv/**": true
+  },
+  "files.exclude": {
+    // "**/.git": true,
+    // "**/.svn": true,
+    // "**/.DS_Store": true
+  },
+
+  // typescript
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}

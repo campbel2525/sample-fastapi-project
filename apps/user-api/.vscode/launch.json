@@ -1,0 +1,18 @@
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "name": "user-api",
+//       "type": "python",
+//       "request": "attach",
+//       "port": 9001,
+//       "host": "localhost",
+//       "pathMappings": [
+//         {
+//           "localRoot": "${workspaceFolder}",
+//           "remoteRoot": "/project"
+//         }
+//       ]
+//     }
+//   ]
+// }
