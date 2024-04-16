@@ -173,10 +173,10 @@ push: ## push
 	git commit -m "Commit at $$(date +'%Y-%m-%d %H:%M:%S')"
 	git push origin main
 
-reset-commit: ## mainブランチのコミット履歴を1つにする
-	git checkout --orphan new-branch-name
-	git add .
-	git branch -D main
-	git branch -m main
-	git commit -m "Initial commit"
-	git push origin -f main
+# reset-commit: ## mainブランチのコミット履歴を1つにする
+# 	git checkout --orphan new-branch-name
+# 	git add .
+# 	git branch -D main
+# 	git branch -m main
+# 	git commit -m "Initial commit"
+# 	git push origin -f main
