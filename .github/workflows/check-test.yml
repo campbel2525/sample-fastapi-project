@@ -26,21 +26,7 @@ jobs:
 
     - name: Run check
       run: |
-        docker compose exec -it admin-api pipenv run isort . -check-only
-        docker compose exec -it admin-api pipenv run black . --check
-        docker compose exec -it admin-api pipenv run flake8 .
-        docker compose exec -it admin-api pipenv run mypy .
-
-        docker compose exec -it user-api pipenv run isort . -check-only
-        docker compose exec -it user-api pipenv run black . --check
-        docker compose exec -it user-api pipenv run flake8 .
-        docker compose exec -it user-api pipenv run mypy .
-
-        docker compose exec -it admin-front npx prettier --check "**/*.ts"
-        docker compose exec -it admin-front npx eslint .
-
-        docker compose exec -it user-front npx prettier --check "**/*.ts"
-        docker compose exec -it user-front npx eslint .
+        make github-check
 
     - name: Run tests
       run: |
