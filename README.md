@@ -21,7 +21,7 @@ There are both admin and user sides.
 
 Correspondingly.
 
-## 開発環境 url
+## Development environment url
 
 admin-api
 http://localhost:8000/docks  

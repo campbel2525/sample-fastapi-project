@@ -180,3 +180,35 @@ push: ## push
 # 	git branch -m main
 # 	git commit -m "Initial commit"
 # 	git push origin -f main
+
+github-init:
+# キャッシュ、ログ、ライブラリの削除
+	make c
+# ビルド
+	docker compose -f $(pf) -p $(pn) build --no-cache
+	docker compose -f $(pf) -p $(pn) down --volumes
+	docker compose -f $(pf) -p $(pn) up -d
+	./docker/wait-for-db.sh
+	docker compose -f $(pf) -p $(pn) exec -T db mysql -psecret < docker/setup.dev.sql
+# ライブラリのインストール
+	make install
+# DBリセット
+	make reset
+
+github-check:
+# admin-api
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run isort . --check-only"
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run black . --check"
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run flake8 ."
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run mypy ."
+# user-api
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run isort . --check-only"
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run black . --check"
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run flake8 ."
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run mypy ."
+# admin-front
+	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx prettier --check "**/*.ts""
+	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx eslint ."
+# user-front
+	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx prettier --check "**/*.ts""
+	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx eslint ."
