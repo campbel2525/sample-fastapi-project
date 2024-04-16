@@ -12,6 +12,7 @@ from config import settings
 bearer_scheme = HTTPBearer()
 ##
 
+
 def get_user_by_access_token(
     authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
     db: Session = Depends(settings.get_db),

@@ -197,18 +197,18 @@ github-init:
 
 github-check:
 # admin-api
-	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run isort . -check-only
-	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run black . --check
-	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run flake8 .
-	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run mypy .
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run isort . --check-only"
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run black . --check"
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run flake8 ."
+	docker compose -f $(pf) -p $(pn) exec -it admin-api bash -c "pipenv run mypy ."
 # user-api
-	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run isort . -check-only
-	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run black . --check
-	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run flake8 .
-	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run mypy .
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run isort . --check-only"
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run black . --check"
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run flake8 ."
+	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run mypy ."
 # admin-front
-	docker compose -f $(pf) -p $(pn) exec -it admin-front npx prettier --check "**/*.ts"
-	docker compose -f $(pf) -p $(pn) exec -it admin-front npx eslint .
+	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx prettier --check "**/*.ts""
+	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx eslint ."
 # user-front
-	docker compose -f $(pf) -p $(pn) exec -it user-front npx prettier --check "**/*.ts"
-	docker compose -f $(pf) -p $(pn) exec -it user-front npx eslint .
+	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx prettier --check "**/*.ts""
+	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx eslint ."
