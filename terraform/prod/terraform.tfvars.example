@@ -1,0 +1,41 @@
+# aws
+aws_access_key = ""
+aws_secret_key = ""
+aws_region     = "ap-northeast-1"
+aws_account_id = ""
+
+#東京リージョンのelbのアカウントIDのため固定
+aws_tokyo_elb_account_id = "582318560864"
+
+# プロジェクトごとの設定
+project     = "ps"
+environment = "prod"
+db_name     = "prod_ps_db"
+
+# github
+github_owner = ""
+github_token = ""
+
+# リポジトリ
+target_repository = "project-sample"
+target_branch     = "prod"
+
+# route53
+aws_route53_record_zone_id = ""
+
+# acm arn
+tokyo_cert_arn    = ""
+virginia_cert_arn = ""
+
+# アプリ名
+admin_api_name   = "admin-api"
+user_api_name    = "user-api"
+admin_front_name = "admin-front"
+user_front_name  = "user-front"
+
+# ドメイン
+domain             = "campbel.jp"
+admin_api_domain   = "admin-api-project-sample.campbel.jp"
+user_api_domain    = "user-api-project-sample.campbel.jp"
+admin_front_domain = "admin-sample.campbel.jp"
+user_front_domain  = "project-sample.campbel.jp"

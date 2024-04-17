@@ -1,5 +1,9 @@
 [日本語はこちら](https://github.com/campbel2525/project-sample/blob/main/README-JAPANESE.md)
 
+# Note
+
+It's still under development, so the code will change a lot.
+
 # Overview
 
 The server uses FastAPI, and the front end is a SPA with Svelte for user management.  

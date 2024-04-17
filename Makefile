@@ -182,8 +182,6 @@ push: ## push
 # 	git push origin -f main
 
 github-init:
-# キャッシュ、ログ、ライブラリの削除
-	make c
 # ビルド
 	docker compose -f $(pf) -p $(pn) build --no-cache
 	docker compose -f $(pf) -p $(pn) down --volumes
