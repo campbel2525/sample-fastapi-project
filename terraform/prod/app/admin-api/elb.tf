@@ -93,23 +93,6 @@ resource "aws_lb_listener" "alb_app_listener_https" {
   }
 }
 
-# apiに振り分ける設定
-resource "aws_lb_listener_rule" "for_ecs_app" {
-  listener_arn = aws_lb_listener.alb_app_listener_https.arn
-  priority     = 100
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.alb_app_target_group.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/*"]
-    }
-  }
-}
-
 # ---------------------------------------------
 # target group
 # ---------------------------------------------
@@ -148,3 +131,24 @@ resource "aws_lb_target_group" "alb_app_target_group" {
 #   target_group_arn = aws_lb_target_group.alb_app_target_group.arn
 #   target_id        = aws_instance.app_server.id
 # }
+
+
+# ---------------------------------------------
+# リスナールール
+# apiに振り分ける設定
+# ---------------------------------------------
+resource "aws_lb_listener_rule" "for_ecs_app" {
+  listener_arn = aws_lb_listener.alb_app_listener_https.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_app_target_group.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+}
