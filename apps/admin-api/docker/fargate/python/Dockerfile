@@ -42,6 +42,7 @@ COPY ./apps/common/api/migrations/ /project/migrations/
 # ライブラリのインストール
 RUN pipenv install
 
+# entrypoint.shの実行
 COPY ./apps/admin-api/docker/fargate/python/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 777 /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
