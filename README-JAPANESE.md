@@ -279,3 +279,5 @@ https://www.django-rest-framework.org/api-guide/viewsets/
 - 作成: create
 - 更新: update
 - 削除: destroy
+
+tyu
