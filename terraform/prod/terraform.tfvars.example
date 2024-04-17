@@ -8,9 +8,9 @@ aws_account_id = ""
 aws_tokyo_elb_account_id = "582318560864"
 
 # プロジェクトごとの設定
-project     = "project-sample"
+project     = "ps"
 environment = "prod"
-db_name     = "prod-project-sample-db"
+db_name     = "prod_ps_db"
 
 # github
 github_owner = ""
@@ -33,8 +33,9 @@ user_api_name    = "user-api"
 admin_front_name = "admin-front"
 user_front_name  = "user-front"
 
-
 # ドメイン
-domain            = "campbel.jp"
-user_front_domain = "project-sample.campbel.jp"
-user_api_domain   = "user-api-project-sample.campbel.jp"
+domain             = "campbel.jp"
+admin_api_domain   = "admin-api-project-sample.campbel.jp"
+user_api_domain    = "user-api-project-sample.campbel.jp"
+admin_front_domain = "admin-sample.campbel.jp"
+user_front_domain  = "project-sample.campbel.jp"
