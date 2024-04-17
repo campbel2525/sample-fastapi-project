@@ -1,9 +1,16 @@
-# name: Deploy to ECS with Database Migration
+# name: '[Deploy] Prod Tool API'
+
+# permissions:
+#   id-token: write
+#   contents: read
 
 # on:
 #   push:
 #     branches:
-#       - main
+#       - prod
+#     paths:
+#       - 'apps/admin-api/**'
+#   # workflow_dispatch:
 
 # jobs:
 #   deploy:
