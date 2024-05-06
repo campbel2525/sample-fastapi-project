@@ -9,8 +9,8 @@ resource "aws_vpc" "vpc" {
   assign_generated_ipv6_cidr_block = false
 
   tags = {
-    Name    = "${var.project}-${var.environment}-vpc"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-vpc"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -25,8 +25,8 @@ resource "aws_subnet" "public_subnet_1a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name    = "${var.project}-${var.environment}-public-subnet-1a"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-public-subnet-1a"
+    Project = var.project_name
     Env     = var.environment
     Type    = "public"
   }
@@ -39,8 +39,8 @@ resource "aws_subnet" "public_subnet_1c" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name    = "${var.project}-${var.environment}-public-subnet-1c"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-public-subnet-1c"
+    Project = var.project_name
     Env     = var.environment
     Type    = "public"
   }
@@ -53,8 +53,8 @@ resource "aws_subnet" "private_subnet_1a" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name    = "${var.project}-${var.environment}-private-subnet-1a"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-private-subnet-1a"
+    Project = var.project_name
     Env     = var.environment
     Type    = "private"
   }
@@ -67,8 +67,8 @@ resource "aws_subnet" "private_subnet_1c" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name    = "${var.project}-${var.environment}-private-subnet-1c"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-private-subnet-1c"
+    Project = var.project_name
     Env     = var.environment
     Type    = "private"
   }
@@ -81,8 +81,8 @@ resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name    = "${var.project}-${var.environment}-public-rt"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-public-rt"
+    Project = var.project_name
     Env     = var.environment
     Type    = "public"
   }
@@ -92,8 +92,8 @@ resource "aws_route_table" "private_rt_1a" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name    = "${var.project}-${var.environment}-private-rt-1a"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-private-rt-1a"
+    Project = var.project_name
     Env     = var.environment
     Type    = "private"
   }
@@ -103,8 +103,8 @@ resource "aws_route_table" "private_rt_1c" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name    = "${var.project}-${var.environment}-private-rt-1c"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-private-rt-1c"
+    Project = var.project_name
     Env     = var.environment
     Type    = "private"
   }
@@ -139,8 +139,8 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name    = "${var.project}-${var.environment}-igw"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-igw"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -159,8 +159,8 @@ resource "aws_nat_gateway" "ngw_1a" {
   subnet_id     = aws_subnet.public_subnet_1a.id
   depends_on    = [aws_internet_gateway.igw]
   tags = {
-    Name    = "${var.project}-${var.environment}-ngw-1a"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-ngw-1a"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -170,8 +170,8 @@ resource "aws_nat_gateway" "ngw_1c" {
   subnet_id     = aws_subnet.public_subnet_1c.id
   depends_on    = [aws_internet_gateway.igw]
   tags = {
-    Name    = "${var.project}-${var.environment}-ngw-1c"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-ngw-1c"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -180,8 +180,8 @@ resource "aws_eip" "ngw_1a" {
   vpc        = true
   depends_on = [aws_internet_gateway.igw]
   tags = {
-    Name    = "${var.project}-${var.environment}-eip-1a"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-eip-1a"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -190,8 +190,8 @@ resource "aws_eip" "ngw_1c" {
   vpc        = true
   depends_on = [aws_internet_gateway.igw]
   tags = {
-    Name    = "${var.project}-${var.environment}-eip-1c"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-eip-1c"
+    Project = var.project_name
     Env     = var.environment
   }
 }

@@ -24,31 +24,31 @@ terraform {
 # ---------------------------------------------
 provider "aws" {
   region     = var.aws_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 provider "aws" {
   alias      = "virginia"
   region     = "us-east-1"
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 # ---------------------------------------------
 # Variables
 # ---------------------------------------------
-variable "aws_access_key" {
+variable "aws_access_key_id" {
   type = string
 }
-variable "aws_secret_key" {
+variable "aws_secret_access_key" {
   type = string
 }
 variable "aws_region" {
   type = string
 }
 
-variable "project" {
+variable "project_name" {
   type = string
 }
 

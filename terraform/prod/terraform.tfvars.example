@@ -1,41 +1,45 @@
 # aws
-aws_access_key = ""
-aws_secret_key = ""
-aws_region     = "ap-northeast-1"
-aws_account_id = ""
+aws_access_key_id     = ""
+aws_secret_access_key = ""
+aws_region            = "ap-northeast-1"
+aws_account_id        = ""
 
 #東京リージョンのelbのアカウントIDのため固定
-aws_tokyo_elb_account_id = "582318560864"
+aws_tokyo_elb_account_id = ""
 
 # プロジェクトごとの設定
-project     = "ps"
-environment = "prod"
-db_name     = "prod_ps_db"
+project_name = "ps"
+environment  = "prod"
+db_name      = "prod_ps_db"
 
 # github
-github_owner = ""
-github_token = ""
-
-# リポジトリ
-target_repository = "project-sample"
-target_branch     = "prod"
+github_owner                     = "xxxxx"
+github_token                     = ""
+target_repository                = "project-sample"
+target_branch                    = "prod"
+aws_codepipeline_webhook_secret  = "VeryRandomStringMoreThan20Byte"
+github_repository_webhook_secret = "VeryRandomStringMoreThan20Byte"
+github_repository_url            = "https://github.com/xxxxx/project-sample"
 
 # route53
 aws_route53_record_zone_id = ""
 
-# acm arn
+# acm arn 後ほど設定
 tokyo_cert_arn    = ""
 virginia_cert_arn = ""
 
-# アプリ名
+# aws lb listener
+aws_lb_listener_http_arn  = ""
+aws_lb_listener_https_arn = ""
+
+# app name
 admin_api_name   = "admin-api"
 user_api_name    = "user-api"
 admin_front_name = "admin-front"
 user_front_name  = "user-front"
 
-# ドメイン
-domain             = "campbel.jp"
-admin_api_domain   = "admin-api-project-sample.campbel.jp"
-user_api_domain    = "user-api-project-sample.campbel.jp"
-admin_front_domain = "admin-sample.campbel.jp"
-user_front_domain  = "project-sample.campbel.jp"
+# app domain
+admin_api_domain   = "admin-api-project-sample.example.com"
+user_api_domain    = "user-api-project-sample.example.com"
+admin_front_domain = "admin-project-sample.example.com"
+user_front_domain  = "project-sample.example.com"

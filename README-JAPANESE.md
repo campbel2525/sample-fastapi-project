@@ -2,60 +2,45 @@
 
 開発途中なので色々コードは変わります
 
+# 技術スタック
+
+バックエンド側: python の fastapi  
+フロントエンド側: next.js(app router)  
+インフラ: AWS  
+iac: terraform  
+開発環境: docker
+
 # 概要
 
-サーバーは fastapi、フロントは svelte の spa でユーザー管理アプリを作ってみました  
-ユーザー管理はどんなプロジェクトでも使用すると思うので何なにかプロジェクトを作る際にはこのリポジトリを参考にしてみてください
-サンプルのため最低限の機能になります  
-fastapi や svelte の方は勉強中です
+ユーザー画面でユーザーが会員登録を行い、管理画面で編集できるといった簡単なサンプルアプリを作ってみました。  
+この機能はどんなプロジェクトでも使用する機能だと思うので、なにかプロジェクトを作る際にはこのリポジトリを参考にしてみてください  
+フォーマッター、静的解析、デバッグなども取り入れています
 
-認証は jwt 認証を用いています  
-fastapi 側のフォルダ構成は今考え中で一旦 laravel のフォルダ構成を参考にして作りました
+fastapi のフォルダ構成は今考え中で一旦 laravel のフォルダ構成を参考にして作りました  
+fastapi や next.js は勉強中ですので、何か不備がありましたら申し訳ありません
 
-# 開発環境について
+# 開発環境
 
-管理側、ユーザー側を作ってあります。
+管理側、ユーザー側を作ってあります。下記の url に対応しています
 
 - 管理側の api: admin-api
+  - http://localhost:8000/docks
 - ユーザー側の api: user-api
+  - http://localhost:8001/docks
 - 管理側のフロント: admin-front
+  - http://localhost:3000/
 - ユーザー側のフロント: user-front
+  - http://localhost:3001/
 
-と対応しています。
+## サンプルユーザー
 
-## 開発環境 url
+管理側  
+admin1@example.com  
+test1234
 
-admin-api
-http://localhost:8000/docks  
-user-api
-http://localhost:8001/docks  
-admin-front
-http://localhost:3000/  
-user-front
-http://localhost:3001/
-
-## 共通
-
-開発環境: docker  
-想定エディタ: vscode or cursor  
-認証方法: jtw
-
-## fastapi 側の環境の詳細
-
-言語: python3.10.0  
-フレームワーク: fasapi  
-デバッグ: debugpy  
-ライブラリ管理: pipenv  
-orm: sqlalchemy  
-mysql: 8.0  
-フォーマッターなど: flake8, mypy, black, isort  
-jwt: pyJw
-
-## svelte 側の環境の詳細
-
-フレームワーク: svelte  
-デザインフレームワーク: sveltestrap  
-言語: typescript
+ユーザー側  
+user1@example.com  
+test1234
 
 ## 環境構築方法
 
@@ -71,48 +56,56 @@ make cp-env
 make init
 ```
 
-手順 3  
-下記のコマンドにて admin-api サーバーを立ち上げて、ブラウザで  
-http://localhost:8000/docks  
-にアクセスして swagger が表示されれば OK
+手順 3 admin-api の立ち上げ方法
 
 ```
 make admin-api-run
 ```
 
-手順 4  
-下記のコマンドにて admin-front サーバーを立ち上げて、ブラウザで  
-http://localhost:3000/  
-にアクセスして画面が表示されれば OK
+を実行してブラウザで  
+http://localhost:8000/docks  
+にアクセスする
+
+手順 4 admin-front の立ち上げ方法
 
 ```
 make admin-front-run
 ```
 
-手順 5  
-下記のコマンドにて user-api サーバーを立ち上げて、ブラウザで  
-http://localhost:8001/docks  
-にアクセスして swagger が表示されれば OK
+を実行してブラウザで  
+http://localhost:3000/  
+にアクセスする
+
+手順 5 user-api の立ち上げ方法
 
 ```
 make user-api-run
 ```
 
-手順 6  
-下記のコマンドにて user-front サーバーを立ち上げて、ブラウザで  
-http://localhost:3001/  
-にアクセスして画面が表示されれば OK
+を実行してブラウザで  
+http://localhost:8001/  
+にアクセスする
+
+手順 6 user-front の立ち上げ方法
 
 ```
 make user-front-run
 ```
 
+を実行してブラウザで  
+http://localhost:3001/  
+にアクセスする
+
+# iac について
+
+参照
+
 # その他
 
 ## push 時のルール
 
-コンテナが立ち上がっている状態で下記のコマンドを実行してから push すること  
-フォーマッタの実行、静的解析チェックが走ります。
+コンテナが立ち上がっている状態で下記のコマンドを実行してから push するようにしてください  
+バックエンド側、フロントエンド側のフォーマッタの実行、静的解析チェックなどが実行されます
 
 ```
 make check
@@ -120,7 +113,7 @@ make check
 
 ## api 側のライブラリのインストール方法
 
-user-api を例に説明します  
+admin-api を例に説明します  
 docker を利用しているので モジュールをインストールする場合はコンテナの中に入ってインストールする必要があります  
 またモジュールの管理に pipenv を使用しているため特別な方法でインストールを実行する必要があります  
 以下にその方法を説明します
@@ -132,7 +125,7 @@ numpy をインストールする方法
 下記のコマンドでコンテナの中に入ります
 
 ```
-make user-api-shell
+make admin-api-shell
 ```
 
 手順 2  
@@ -144,7 +137,7 @@ pipenv install numpy
 
 ## front 側のライブラリのインストール方法
 
-user-front を例に説明します  
+admin-front を例に説明します  
 docker を利用しているので モジュールをインストールする場合はコンテナの中に入ってインストールする必要があります  
 またモジュールの管理に pipenv を使用しているため特別な方法でインストールを実行する必要があります  
 以下にその方法を説明します
@@ -156,7 +149,7 @@ xxx をインストールする方法
 下記のコマンドでコンテナの中に入ります
 
 ```
-make user-front-shell
+make admin-front-shell
 ```
 
 手順 2  
@@ -164,47 +157,6 @@ make user-front-shell
 
 ```
 npm install xxx
-```
-
-## vscode で debugpy によるデバッグの方法
-
-vscode で debugpy によるデバッグ方法を説明します  
-参考: https://atmarkit.itmedia.co.jp/ait/articles/2107/16/news029.html
-
-`python/src/sample.py` をデバッグする方法
-
-手順 1  
-vscode のプラグインの XXX をインストールします
-
-手順 2  
-`python/src/sample.py` のデバッグのコメントアウトを外します
-
-手順 3  
-「python の実行方法」を参考に実行し `python/src/sample.py` を実行します
-
-手順４  
-コンソールを確認すると
-
-```
-waiting ...
-```
-
-と表示されていることを確認
-
-手順 5  
-自分がデバッグを開始したい箇所にブレークポイントをセットします
-
-手順 6  
-F5 のキーを押します  
-デバッグが開始されます。
-
-## python コードのフォーマット、静的解析について
-
-python にはプログラミングコードの品質を保つため、お勧めされているコードフォーマットや静的解析があります。  
-下記のコマンドを実行することで python 配下の python コードが自動で整形がされ、また静的解析が行われます。
-
-```
-make check
 ```
 
 ## マイグレーションについて
@@ -231,24 +183,6 @@ pipenv run alembic upgrade head
 make migrate
 ```
 
-# サンプル URL
-
-fastapi  
-https://fastapi.tiangolo.com/ja/
-
-svelte  
-https://kit.svelte.jp/
-
-svelte 参考  
-https://zenn.dev/wnr/articles/50cnoe5xvzmw
-
-sveltestrap  
-https://sveltestrap.js.org/?path=/docs/sveltestrap-overview--docs  
-https://github.com/bestguy/sveltestrap
-
-bootstrap  
-https://getbootstrap.jp/docs/5.0/components/card/#navigation
-
 # 課題
 
 1. 認証を sha512 などに変更する
@@ -268,7 +202,7 @@ https://getbootstrap.jp/docs/5.0/components/card/#navigation
 4. front 側にリフレッシュトークンの仕組みを入れる
 5. admin-api-と user-api の認証のロジックを共通化する
 
-## 関数名
+## restapi の関数名
 
 それぞれの関数名は下記でよろしくお願いします  
 なんでもいいのですが djangorest framework を参考にしました  
@@ -280,5 +214,22 @@ https://www.django-rest-framework.org/api-guide/viewsets/
 - 更新: update
 - 削除: destroy
 
-tyu
-ccccc
+# 運用
+
+## ブランチ運用
+
+想定しているブランチは下記の通りになります  
+main ブランチ: 開発  
+(stg ブランチ: ステージングブランチ)  
+prod ブランチ: 本番ブランチ
+
+## デプロイフロー
+
+デプロイのフローの流れは下記の通りになっています
+
+1. main ブランチ -> prod ブランチのプルリクを作る
+2. github 上でテストが実行される
+3. テストが正しく終わったことを確認して、prod ブランチにマージする。これがトリガーになって下記の cicd が実行される
+4. フロント、バックエンドのそれぞれがビルドされる
+5. マイグレーション用の admin-api をビルドして、マイグレーションを実行する(ここのビルドは無駄。1 個前のステップでビルドしたものを使えばいいと思うはできないものか)
+6. 上記の 4 つのプロジェクトをそれぞれデプロイする

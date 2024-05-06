@@ -1,46 +1,69 @@
-import request from '@api/base-api';
-import type {
-  ApiResponse,
-  ApiErrorResponse,
-} from '@schemas/api/responses/base-response';
-import type { UserIndexResponse } from '@schemas/api/requests/user-responses';
-import type { UserResource } from '@schemas/api/resources/user-resources';
-import type { UserUpdateRequest } from '@schemas/api/requests/user-requests';
+import request from '@/api/base-api'
+import type { User } from '@/types/models'
+import type { UserUpdateRequest } from '@/types/requests/user-requests'
+import type { ApiResponse } from '@/types/responses/base-responses'
+import type { UserIndexResponse } from '@/types/responses/user-responses'
 
-export const userIndexApi = (): Promise<
-  ApiResponse<UserIndexResponse> | ApiErrorResponse
-> => {
-  return request({
-    url: `v1/users`,
-    method: 'get',
-  });
-};
+export const indexApi = async (): Promise<ApiResponse<UserIndexResponse>> => {
+  try {
+    const result = await request({
+      url: `v1/users`,
+      method: 'get',
+    })
+    return result.data
+  } catch (error) {
+    return Promise.reject({
+      message: 'API request failed',
+      error: error,
+    })
+  }
+}
 
-export const userRetrieveApi = (
+export const retrieveApi = async (id: number): Promise<ApiResponse<User>> => {
+  try {
+    const result = await request({
+      url: `v1/users/${id}`,
+      method: 'get',
+    })
+    return result.data
+  } catch (error) {
+    return Promise.reject({
+      message: 'API request failed',
+      error: error,
+    })
+  }
+}
+
+export const updateApi = async (
   id: number,
-): Promise<ApiResponse<UserResource> | ApiErrorResponse> => {
-  return request({
-    url: `v1/users/${id}`,
-    method: 'get',
-  });
-};
+  data: UserUpdateRequest
+): Promise<ApiResponse<User>> => {
+  try {
+    const result = await request({
+      url: `v1/users/${id}`,
+      method: 'put',
+      data: data,
+    })
+    return result.data
+  } catch (error) {
+    return Promise.reject({
+      message: 'API request failed',
+      error: error,
+    })
+  }
+}
 
-export const userUpdateApi = (
-  id: number,
-  data: UserUpdateRequest,
-): Promise<ApiResponse<UserResource> | ApiErrorResponse> => {
-  return request({
-    url: `v1/users/${id}`,
-    method: 'put',
-    data: data,
-  });
-};
-
-export const userDestroyApi = (
-  id: number,
-): Promise<ApiResponse<null> | ApiErrorResponse> => {
-  return request({
-    url: `v1/users/${id}`,
-    method: 'delete',
-  });
-};
+export const destroyApi = async (id: number): Promise<ApiResponse<null>> => {
+  try {
+    const result = await request({
+      url: `v1/users/${id}`,
+      method: 'delete',
+    })
+    return result.data
+  } catch (error) {
+    return Promise.reject({
+      message: 'API request failed',
+      error: error,
+    })
+  }
+}

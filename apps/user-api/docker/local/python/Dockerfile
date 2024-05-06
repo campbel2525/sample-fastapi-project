@@ -1,16 +1,13 @@
-FROM python:3.10
+FROM public.ecr.aws/docker/library/python:3.10-bullseye
 
 # apt-getのアップデート
-RUN apt-get update
+RUN apt-get update && apt-get upgrade -y
 
 # 必要なものをインストール
-RUN apt-get -y install \
-    locales \
-    vim \
-    less
+# RUN apt-get -y install locales
 
 # 日本語設定
-RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+# RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 
 # デフォルトのディレクトリを設定
 # イメージにディレクトリがないので作成される

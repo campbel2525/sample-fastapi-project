@@ -1,14 +1,12 @@
-export const localStorageKey = {
+export const localStorageKeys = {
   accessToken: 'access_token',
   refreshToken: 'refresh_token',
-};
+}
 
-export const urls = {
-  signUp: '/accounts/sign-up',
-  signIn: '/accounts/sign-in',
-  me: '/accounts/me',
+export const frontPaths = {
   home: '/',
+  login: '/accounts/login',
   users: '/users',
-};
+}
 
-export const NO_SIGN_IN_CHECK_URLS = [urls.home];
+export const loginPagePath = frontPaths.login

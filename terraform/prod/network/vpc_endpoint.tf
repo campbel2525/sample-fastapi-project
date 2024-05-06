@@ -14,8 +14,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_ecr" {
   private_dns_enabled = true
 
   tags = {
-    Name    = "${var.project}-${var.environment}-ecr-api-vpc-endpoint"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-ecr-vpc-endpoint"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -31,8 +31,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_dkr" {
   private_dns_enabled = true
 
   tags = {
-    Name    = "${var.project}-${var.environment}-ecr-dkr-vpc-endpoint"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-ecr-dkr-vpc-endpoint"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -45,8 +45,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
   route_table_ids = [aws_route_table.private_rt_1a.id, aws_route_table.private_rt_1c.id]
 
   tags = {
-    Name    = "${var.project}-${var.environment}-s3-vpc-endpoint"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-s3-vpc-endpoint"
+    Project = var.project_name
     Env     = var.environment
   }
 }
@@ -74,8 +74,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
 #   private_dns_enabled = true
 
 #   tags = {
-#     Name    = "${var.project}-${var.environment}-vpc-logs-endpoint"
-#     Project = var.project
+#     Name    = "${var.project_name}-${var.environment}-vpc-logs-endpoint"
+#     Project = var.project_name
 #     Env     = var.environment
 #   }
 # }
@@ -92,8 +92,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
 #   private_dns_enabled = true
 
 #   tags = {
-#     Name    = "${var.project}-${var.environment}-secretsmanager-vpc-endpoint"
-#     Project = var.project
+#     Name    = "${var.project_name}-${var.environment}-secretsmanager-vpc-endpoint"
+#     Project = var.project_name
 #     Env     = var.environment
 #   }
 # }
@@ -110,8 +110,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
 #   private_dns_enabled = true
 
 #   tags = {
-#     Name    = "${var.project}-${var.environment}-ssm-vpc-endpoint"
-#     Project = var.project
+#     Name    = "${var.project_name}-${var.environment}-ssm-vpc-endpoint"
+#     Project = var.project_name
 #     Env     = var.environment
 #   }
 # }
@@ -129,8 +129,8 @@ resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
 #   private_dns_enabled = true
 
 #   tags = {
-#     Name    = "${var.project}-${var.environment}-ssmmessages-vpc-endpoint"
-#     Project = var.project
+#     Name    = "${var.project_name}-${var.environment}-ssmmessages-vpc-endpoint"
+#     Project = var.project_name
 #     Env     = var.environment
 #   }
 # }
@@ -139,13 +139,13 @@ resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
 # Security Group
 # ---------------------------------------------
 resource "aws_security_group" "vpc_endpoint_sg" {
-  name        = "${var.project}-${var.environment}-vpc-endpoint-sg"
+  name        = "${var.project_name}-${var.environment}-vpc-endpoint-sg"
   description = "vpc endpoint role security group"
   vpc_id      = aws_vpc.vpc.id
 
   tags = {
-    Name    = "${var.project}-${var.environment}-vpc-endpoint-sg"
-    Project = var.project
+    Name    = "${var.project_name}-${var.environment}-vpc-endpoint-sg"
+    Project = var.project_name
     Env     = var.environment
   }
 }

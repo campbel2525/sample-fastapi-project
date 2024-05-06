@@ -1,33 +1,39 @@
-variable "name" {}
-variable "vpc_id" {}
-variable "port" {}
-variable "cidr_blocks" {
-  type = list(string)
+data "aws_security_group" "alb_sg" {
+  tags = {
+    Name    = "${var.project_name}-${var.environment}-alb-sg"
+    Project = var.project_name
+    Env     = var.environment
+  }
 }
 
-resource "aws_security_group" "default" {
-  name   = var.name
-  vpc_id = var.vpc_id
+# data "aws_security_group" "ecs_only_from_alb_sg" {
+#   tags = {
+#     Name    = "${var.project_name}-${var.environment}-ecs-only-from-alb-sg"
+#     Project = var.project_name
+#     Env     = var.environment
+#   }
+# }
+
+data "aws_security_group" "db_sg" {
+  tags = {
+    Name    = "${var.project_name}-${var.environment}-db-sg"
+    Project = var.project_name
+    Env     = var.environment
+  }
 }
 
-resource "aws_security_group_rule" "ingress" {
-  type              = "ingress"
-  from_port         = var.port
-  to_port           = var.port
-  protocol          = "tcp"
-  cidr_blocks       = var.cidr_blocks
-  security_group_id = aws_security_group.default.id
+data "aws_security_group" "ec2_sg" {
+  tags = {
+    Name    = "${var.project_name}-${var.environment}-ec2-sg"
+    Project = var.project_name
+    Env     = var.environment
+  }
 }
 
-resource "aws_security_group_rule" "egress" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.default.id
-}
-
-output "security_group_id" {
-  value = aws_security_group.default.id
+data "aws_security_group" "codebuild_sg" {
+  tags = {
+    Name    = "${var.project_name}-${var.environment}-codebuild-sg"
+    Project = var.project_name
+    Env     = var.environment
+  }
 }

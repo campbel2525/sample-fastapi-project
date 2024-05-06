@@ -69,7 +69,7 @@ services:
     tty: true
     build:
       context: ${ADMIN_FRONT_CONTEXT}
-      dockerfile: docker/local/node/Dockerfile
+      dockerfile: docker/local/nodejs/Dockerfile
     ports:
       - "127.0.0.1:3000:3000" # webサーバー
     volumes:
@@ -83,7 +83,7 @@ services:
     tty: true
     build:
       context: ${USER_FRONT_CONTEXT}
-      dockerfile: docker/local/node/Dockerfile
+      dockerfile: docker/local/nodejs/Dockerfile
     ports:
       - "127.0.0.1:3001:3000" # webサーバー
     volumes:

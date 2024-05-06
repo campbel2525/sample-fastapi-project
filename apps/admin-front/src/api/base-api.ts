@@ -1,67 +1,100 @@
-import axios from 'axios';
+import type { AxiosResponse, AxiosError } from 'axios'
+import axios from 'axios'
 
-import type {
-  ApiResponse,
-  ApiErrorResponse,
-} from '@schemas/api/base-api-schemas';
-import { localStorageKey } from '@config/settings';
+import { localStorageKeys } from '@/config/settings'
+import type { ApiResponse } from '@/types/responses/base-responses'
 
 const service = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 5000,
-});
+})
 
 service.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem(localStorageKey.accessToken);
+    config.headers = config.headers || {}
+    const accessToken = localStorage.getItem(localStorageKeys.accessToken)
     if (accessToken !== undefined) {
-      config.headers['Authorization'] = 'Bearer ' + accessToken;
+      config.headers['Authorization'] = 'Bearer ' + accessToken
     }
-    return config;
+    return config
   },
-  (error) => {
-    Promise.reject(error);
-  },
-);
+  (error: AxiosError) => {
+    Promise.reject(error)
+  }
+)
 
 service.interceptors.response.use(
-  (response): ApiResponse<Record<string, unknown>> => {
-    console.log(response);
+  (response): AxiosResponse<ApiResponse<Record<string, unknown>>> => {
+    // eslint-disable-next-line no-console
+    console.log(response)
 
-    const resultData = {
+    const data = {
       data: response.data,
+      validationErrors: null,
       status: response.status,
       success: true,
       message: '',
-    };
-    if (response.data.message) {
-      resultData.message = response.data.message ?? '';
+      errorMessage: '',
     }
-    return resultData;
+    if (response.data.message) {
+      data.message = response.data.message ?? ''
+    }
+
+    return {
+      data,
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+      config: response.config,
+    }
   },
-  (error): ApiErrorResponse => {
-    const resultData = {
+  (error): AxiosResponse<ApiResponse<null>> => {
+    // eslint-disable-next-line no-console
+    console.log(error)
+
+    if (error.response === undefined) {
+      const data = {
+        data: null,
+        validationErrors: null,
+        status: 0,
+        success: false,
+        message: '',
+        errorMessage: '',
+      }
+      return {
+        data: data,
+        status: data.status,
+        statusText: 'Error',
+        headers: {},
+        config: error.config || { headers: {} },
+      }
+    }
+
+    const data = {
       data: null,
+      validationErrors: null,
       status: error.response.status,
       success: false,
       message: '',
-    };
-    console.log(error);
+      errorMessage: '',
+    }
 
-    // if (resultData.status >= 500) {
-    //   vm.$router.push({
-    //     name: 'Error500'
-    //   })
-    // }
     if (error.response.status === 422 && error.response.data?.detail) {
-      resultData.data = error.response.data?.detail;
-      console.log(error.response.data);
+      data.validationErrors = error.response.data?.detail
     }
-    if (error.response.data.message) {
-      resultData.message = error.response.data.message ?? '';
-    }
-    return resultData;
-  },
-);
 
-export default service;
+    if (error.response.data.message) {
+      data.message = error.response.data.message ?? ''
+    }
+
+    return {
+      data: data,
+      status: error.response.status,
+      statusText: error.response.statusText,
+      headers: error.response.headers,
+      config: error.config,
+    }
+  }
+)
+
+export default service

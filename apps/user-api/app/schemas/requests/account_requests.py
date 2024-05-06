@@ -19,7 +19,7 @@ class AccountSignUpRequest(BaseModel):
     )
 
 
-class AccountSignInRequest(BaseModel):
+class LoginRequest(BaseModel):
     email: EmailStr = Field(
         min_length=1,
         example="user1@example.com",
@@ -32,7 +32,7 @@ class AccountSignInRequest(BaseModel):
     )
 
 
-class AccountRefreshTokenRequest(BaseModel):
+class RefreshTokenRequest(BaseModel):
     refresh_token: str = Field(
         example="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxOSwiZXhwIjoxNzA1OTUzNjcxLCJ0eXAiOiJyZWZyZXNoX3Rva2VuIn0.XU-gxVl2SdMMf_TYfV0Zu8VxkCzJT-Pt6v3hwxKMZrs",  # noqa
         description="リフレッシュトークン",

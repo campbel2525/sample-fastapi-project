@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from app import models
 from app.auth import authentication
 from app.schemas.requests.account_requests import (
-    AccountRefreshTokenRequest,
-    AccountSignInRequest,
     AccountSignUpRequest,
+    LoginRequest,
+    RefreshTokenRequest,
 )
 from app.schemas.resources.user_resources import UserResource
 from app.schemas.responses.account_responses import JwtResponse
@@ -53,14 +53,14 @@ async def sign_up(
 
 
 @router.post(
-    "/v1/accounts/sign-in",
+    "/v1/accounts/login",
     response_model=JwtResponse,
     summary=str(swagger_configs.get_schemas()["accounts_sign_in"]["summary"]),
     description=str(swagger_configs.get_schemas()["accounts_sign_in"]["description"]),
     tags=list(swagger_configs.get_schemas()["accounts_sign_in"]["tags"]),
 )
 async def sign_in(
-    request: AccountSignInRequest,
+    request: LoginRequest,
     db: Session = Depends(settings.get_db),
 ) -> JwtResponse:
     """
@@ -99,7 +99,7 @@ async def sign_in(
     tags=list(swagger_configs.get_schemas()["accounts_refresh_token"]["tags"]),
 )
 async def refresh_token(
-    request: AccountRefreshTokenRequest,
+    request: RefreshTokenRequest,
     db: Session = Depends(settings.get_db),
 ) -> JwtResponse:
     """

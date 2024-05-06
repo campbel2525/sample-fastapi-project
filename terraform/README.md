@@ -1,6 +1,21 @@
-## 環境構築
+# 概要
 
-### 手順
+環境は
+
+- stg
+- prod
+
+を想定しています。リソースはひとまとまりになるようにフェルだを設計しています  
+全環境で共通の処理、書く環境で設定する項目があります。  
+route53 は全環境で共通の処理です。(stg も prod も同じドメインを使用してサブドメインで作成することを想定しているためです。)
+
+# 環境構築
+
+## 環境変数の設定の手順
+
+環境変数は格環境ごとに作成します。リソースに限らず同じ環境変数を使用します。
+`make cp-cnv`で格リソースにコピーが可能です  
+下記はその手順になります
 
 1  
 terraform/common/route53/terraform.tfvars.example  
@@ -18,30 +33,33 @@ terraform/prod/terraform.tfvars
 cd terraform/prod
 
 4  
-make env
+make cp-env
 
-## 初期のプロジェクトの環境構築について
+# prod 環境を作る手順のサンプル
 
-### 新規で作成する手順
+手順 1~手順 5 は全環境で 1 回行います。(stg も prod も同じドメインを使用してサブドメインで作成することを想定しているためです。)
 
 参考 udemy  
-お名前.com でドメイン(campbel.jp)をとったと想定します
+お名前.com でドメイン(example.com)を取得したと想定します
 
-1  
-acm や route53 の設定をします
+1 acm や route53 の設定(ネームサーバー)
+
+terraform/common/route53/terraform.tfvars.example  
+を参考に  
+terraform/common/route53/terraform.tfvars  
+を作成する  
+その後に下記のコマンドを実行する
 
 ```
 cd terraform/common/route53
 terraform init -migrate-state && terraform apply -auto-approve
 ```
 
-2  
-お名前.com に dns の設定  
+2 お名前.com の dns の設定  
 aws のマネコンを開き、route53 のリソースにアクセスし、作成されたホストゾーンを開く  
 作成された タイプが「NS」 の「値/トラフィックのルーティング先」の値を値をお名前.com のネームサーバーに設定を行う(最後の「.」は外す)
 
-3  
-acm の CNAME をお名前.com に設定  
+3 acm の CNAME をお名前.com に設定  
 手順 2 の画面と同じ
 acm を開く(東京、バージニアリージョンのどっちでも ok)  
 お名前.com の「DNS 設定/転送設定」のリンク -> DNS レコード設定を利用する  
@@ -53,7 +71,7 @@ acm を開く(東京、バージニアリージョンのどっちでも ok)
 「お名前.com の TYPE」は CNAME
 
 ネームサーバーの変更確認コマンド  
-nslookup -type=ns campbel.jp
+nslookup -type=ns example.com
 
 ここまで行ったら、一旦コンソールを修了して ok  
 時間が経つと  
@@ -65,89 +83,78 @@ route53 の ホストゾーン ID と東京リージョンの acm の arn とバ
 terraform/prod/terraform.tfvars  
 に書き込む
 
-5  
-cd terraform/prod  
-make env  
-(後に aws コマンド化)
+5
 
-6  
-make apply  
+```
+cd terraform/prod
+make cp-env
+```
+
+6
+
+```
+make apply1
+```
+
+7
+aws のマネコンから aws lb listener arn を取得して terraform/prod/terraform.tfvars にセットする
+セットするのは下記の項目
+
+- aws_lb_listener_http_arn
+- aws_lb_listener_https_arn
+
+その後下記のコマンド実行する
+
+```
+make cp-env
+```
+
+8
+
+```
+make apply2
+```
+
+9  
+rds のパスワードを書き換える
 ssm にプロジェクトの.env を登録する  
-codepipeline の Source の編集で github の認証情報の「保留中の接続を更新」を完了させる
+(github との連携を手動で行う)
+codepipeline の Source の編集で github の認証情報の「保留中の接続を更新」を完了させる。一旦画面を開いて閉じてから再度開く必要がある
 
-### aws-cli コマンド
+10  
+githubprod ブランチに push する
 
-aws-cli  
-ec2 一覧
+# その他
 
-```
-aws --profile campbel2525 ec2 describe-instances
-```
+## github の ghp の設定方法
 
-rds 一覧
+ghp の設定  
+https://rfs.jp/server/git/github/personal_access_tokens.html
 
-```
-aws --profile campbel2525 rds describe-db-instances
-```
+キーの設定場所  
+profile settings > Developer Settings > Personal access tokens > tokens (classic)
 
-例 踏み台サーバー - shell
-
-```
-aws --profile campbel2525 ssm start-session --target i-0b33f6c640b533e89 --document-name SSM-SessionManagerRunShell
-```
-
-例 踏み台サーバー - ポートホワード
-
-```
-aws --profile campbel2525 ssm start-session --target i-0058f9967879b5cfe --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters '{"host":["myai-prod-mysql-standalone.ctecenutz9b2.ap-northeast-1.rds.amazonaws.com"],"portNumber":["3306"],"localPortNumber":["13306"]}'
-```
-
-コンテナにログイン
-
-```
-aws ecs execute-command --profile campbel2525 --region ap-northeast-1 --cluster myai-prod-ecs-cluster --task 5ff182b68905403f99f76b133287dd52 --container myai-prod-user-api-app --interactive --command "/bin/bash"
-```
-
-パラメーターストア取得
-
-```
-aws --profile campbel2525 ssm get-parameter --name "/ecs/myai/prod/migration1/.env" --with-decryption --query 'Parameter.Value' --output text
-```
-
-## メモ
-
-ecr は ecs と完全に独立しているため、tf ファイルを分けてもいいが、今回は一緒にまとめて作っている  
-別ファイルに切り出してもいいかも
-
-github の ghp の設定方法  
-ghp での設定  
-https://rfs.jp/server/git/github/personal_access_tokens.html  
 codepipeline との連携で必要な権限  
-GitHub Personal Access Token (ghp)を CodePipeline で使用するためには、以下のスコープの権限が一般的に必要です。  
+GitHub Personal Access Token (ghp)を CodePipeline で使用するためには、以下のスコープの権限が一般的に必要です。
+
 repo: プライベートリポジトリを含むすべてのリポジトリへの読み取り/書き込みアクセスを有効にします。  
 admin:repo_hook: リポジトリフック（webhooks）の読み取り、書き込み、および削除を有効にします。
 
-今後  
-backend "s3"  
-の部分を env かできたらいいな。  
-->現状は仕様としてできないらしい
+## 今後の課題
 
-### todo
+1.  下記の内容を要調査する
 
-iam の権限の絞り込み  
-role の権限の絞り込み  
-s3 の tf 化  
-github 連携をもっといい感じにできる？
+- iam の権限の絞り込み
+- role の権限の絞り込み
+- github 連携をもっといい感じにできる？
 
-### vpc エンドポイントについて
+2. vpc エンドポイントの再考察
+   現状設定している vpc エンドポイントは ecr.dkr, ecr.api, s3 の 3 つのみです。 他にも logs, secretsmanager, ssm, ssmmessages の vpc エンドポイントもあるようです  
+   よく要検討すること  
+   参考 url  
+   https://dev.classmethod.jp/articles/vpc-endpoints-for-ecs-2022/  
+   https://qiita.com/ldr/items/7c8bc08baca1945fdb50
 
-前にいた現場では、vpc エンドポイントは ecr.dkr, ecr.api, s3 の 3 つのみでした  
-他にも logs, secretsmanager, ssm, ssmmessages の vpc エンドポイントもあるようです  
-よく要検討すること  
-参考 url  
-https://dev.classmethod.jp/articles/vpc-endpoints-for-ecs-2022/  
-https://qiita.com/ldr/items/7c8bc08baca1945fdb50
-
-### やりたいこと
-
-「コンテナランタイム ID 名」は「タスク id-265927825」のようにしたい。 265927825 はおそらくランダムな数字
+3. 現状は prod しかないが stg 環境も作る。マルチ環境は terraform どう作るか考える  
+   参考 url  
+   https://qiita.com/poly_soft/items/c71bb763035b2047d2db

@@ -6,7 +6,7 @@ from app import models
 from app.auth import authentication
 from app.schemas.requests.user_requests import UserUpdateRequest
 from app.schemas.resources.user_resources import UserResource
-from app.schemas.responses.user_responses import UserListResponse
+from app.schemas.responses.user_responses import IndexResponse
 from config import settings, swagger_configs
 
 router = APIRouter()
@@ -14,7 +14,7 @@ router = APIRouter()
 
 @router.get(
     "/v1/users",
-    response_model=UserListResponse,
+    response_model=IndexResponse,
     summary=str(swagger_configs.get_schemas()["users_index"]["summary"]),
     description=str(swagger_configs.get_schemas()["users_index"]["description"]),
     tags=list(swagger_configs.get_schemas()["users_index"]["tags"]),
@@ -25,9 +25,9 @@ router = APIRouter()
 async def index(
     # auth_user=Depends(authentication.get_user_by_access_token),
     db: Session = Depends(settings.get_db),
-) -> UserListResponse:
+) -> IndexResponse:
     users = db.query(models.User).all()
-    return UserListResponse(data=[UserResource.from_orm(user) for user in users])
+    return IndexResponse(data=[UserResource.from_orm(user) for user in users])
 
 
 @router.get(

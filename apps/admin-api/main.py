@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from app.middlewares import middleware
+from app.middlewares import middlewares
 from config import debug_configs, swagger_configs
-from routes import api_route
+from routes import api_routes
 
 # デバッグの設定
 debug_configs.run_debug()
@@ -12,9 +12,9 @@ swagger_info = swagger_configs.get_swagger_info()
 app = FastAPI(**swagger_info)
 
 # ルーティングの記述
-api_route.routing(app)
+api_routes.routing(app)
 
 # エラーハンドラー
 
 # 必要なミドルウェアを設定する
-middleware.cors(app)
+middlewares.cors(app)

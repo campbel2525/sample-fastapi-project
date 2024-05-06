@@ -1,0 +1,149 @@
+# ==================================
+# 下記のものは、dockerで管理されているプロジェクトのデプロイを行うためのワークフローです。
+# 下記のもので一通りのデプロイを行うことができます。
+# ecsのtask定義をlastestにする必要があります
+# 個人的にはgit hubactoinを使用するメリットが現状ないと感じたため、codepilineを使用するようにします。
+# 理由
+# - blue/greenデプロイの設定がクソめんどくさい
+# - 下記を見て貰えばわかるのですが、記述量がやけに多い
+# いい点もあって
+# - aws - githubの連携ではhookを使用する必要がないこと。(その代わりgithubに環境変数を設定する必要がある)
+# ==================================
+# name: Build, Migrate, and Deploy to AWS
+
+# # デプロイのタイミングをなるべく合わせたいのですべてデプロイする
+# on:
+#   push:
+#     branches:
+#       - prod
+
+# env:
+#   PROJECT_NAME: ps
+#   ENVIRONMENT: prod
+#   REPOSITORY_URI_ADMIN_API_APP: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ps-prod-admin-api-app
+#   REPOSITORY_URI_USER_API_APP: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/ps-prod-user-api-app
+#   NODE_VERSION: 18
+
+# jobs:
+#   build-admin-api:
+#     name: Build Docker image for admin-api
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
+
+#     - name: Set up AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v4
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: ${{ secrets.AWS_REGION }}
+
+#     - name: Login to Amazon ECR
+#       uses: aws-actions/amazon-ecr-login@v2
+
+#     - name: Set up Docker Buildx
+#       uses: docker/setup-buildx-action@v3
+
+#     # - name: Cache Docker layers
+#     #   uses: actions/cache@v4
+#     #   with:
+#     #     path: /tmp/.buildx-cache-admin-api
+#     #     key: ${{ runner.os }}-buildx-admin-api-${{ github.sha }}
+#     #     restore-keys: |
+#     #       ${{ runner.os }}-buildx-admin-api-
+
+#     - name: Build Docker image for admin-api
+#       uses: docker/build-push-action@v5
+#       with:
+#         context: .
+#         file: ./apps/admin-api/docker/fargate/python/Dockerfile
+#         tags: |
+#           ${{ env.REPOSITORY_URI_ADMIN_API_APP }}:${{ github.sha }}
+#           ${{ env.REPOSITORY_URI_ADMIN_API_APP }}:latest
+#         push: true
+#         load: false
+#         # cache-from: type=local,src=/tmp/.buildx-cache-admin-api
+#         # cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-admin-api
+#       id: admin-api-build
+
+#   # マイグレーション用のecsを実行する
+#   migration1:
+#     name: Run Migrations on ECS
+#     runs-on: ubuntu-latest
+#     needs: [build-admin-api]
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Set up AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+
+#       - name: Retrieve the latest task definition revision for migration1
+#         id: get-taskdef-migration1
+#         run: |
+#           LATEST_TASKDEF_MIGRATION1=$(aws ecs describe-task-definition --task-definition ps-prod-admin-api --query 'taskDefinition.taskDefinitionArn' --output text --region ${AWS_REGION})
+#           echo "LATEST_TASKDEF_MIGRATION1=$LATEST_TASKDEF_MIGRATION1" >> $GITHUB_ENV
+#           echo "::set-output name=taskdef-migration1::$LATEST_TASKDEF_MIGRATION1"
+
+#       - name: Run ECS Task with Command Override
+#         id: run-migration-task
+#         run: |
+#           MIGRATION_TASK_ID=$(aws ecs run-task \
+#             --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
+#             --launch-type FARGATE \
+#             --task-definition ${{ steps.get-taskdef-migration1.outputs.taskdef-migration1 }} \
+#             --network-configuration "awsvpcConfiguration={subnets=[${{ secrets.AWS_SUBNET_ID1 }},${{ secrets.AWS_SUBNET_ID2 }}],securityGroups=[${{ secrets.AWS_SECURITY_GROUP_ADMIN_API }}],assignPublicIp=DISABLED}" \
+#             --overrides '{"containerOverrides":[{"name":"${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app","command":["pipenv", "run", "alembic", "upgrade", "head"]}]}' \
+#             --query 'tasks[0].taskArn' --output text)
+#           echo "MIGRATION_TASK_ID=$MIGRATION_TASK_ID" >> $GITHUB_ENV
+#           echo "::set-output name=migration-task-id::$MIGRATION_TASK_ID"
+
+#       - name: Wait for Task Completion
+#         run: |
+#           aws ecs wait tasks-stopped \
+#             --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
+#             --tasks ${{ steps.run-migration-task.outputs.migration-task-id }}
+
+#   deploy-admin-api:
+#     name: Deploy to ECS
+#     needs: [
+#       migration1,
+#       # build-admin-api
+#     ]  # 前のジョブが完了していることを保証
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Set up AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+
+#       - name: Retrieve the task definition revision for admin-api
+#         id: get-taskdef-admin-api
+#         run: |
+#           TASKDEF_ADMIN_API=$(aws ecs describe-task-definition --task-definition ps-prod-admin-api --query 'taskDefinition.taskDefinitionArn' --output text --region ${AWS_REGION})
+#           echo "TASKDEF_ADMIN_API=$TASKDEF_ADMIN_API" >> $GITHUB_ENV
+#           echo "::set-output name=taskdef-admin-api::$TASKDEF_ADMIN_API"
+
+#       - name: Deploy ECS Task for admin-api with specific revision
+#         run: |
+#           aws ecs update-service \
+#             --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
+#             --service ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app \
+#             --task-definition ${{ steps.get-taskdef-admin-api.outputs.taskdef-admin-api }} \
+#             --force-new-deployment
+
+#       - name: Wait for Task Completion
+#         run: |
+#           aws ecs wait services-stable \
+#             --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
+#             --services ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app

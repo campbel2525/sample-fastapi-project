@@ -7,8 +7,8 @@ resource "aws_acm_certificate" "tokyo_cert" {
   validation_method = "DNS"
 
   tags = {
-    Name    = "${var.project}-wildcard-sslcert-tokyo"
-    Project = var.project
+    Name    = "${var.project_name}-wildcard-sslcert-tokyo"
+    Project = var.project_name
     # Env     = var.environment
   }
 
@@ -54,8 +54,8 @@ resource "aws_acm_certificate" "virginia_cert" {
   validation_method = "DNS"
 
   tags = {
-    Name    = "${var.project}-wildcard-sslcert-virginia"
-    Project = var.project
+    Name    = "${var.project_name}-wildcard-sslcert-virginia"
+    Project = var.project_name
     # Env     = var.environment
   }
 

@@ -3,10 +3,7 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.auth import authentication
-from app.schemas.requests.account_requests import (
-    AccountRefreshTokenRequest,
-    AccountSignInRequest,
-)
+from app.schemas.requests.account_requests import LoginRequest, RefreshTokenRequest
 from app.schemas.resources.admin_user_resources import AdminUserResource
 from app.schemas.responses.account_responses import JwtResponse
 from config import settings, swagger_configs
@@ -15,14 +12,14 @@ router = APIRouter()
 
 
 @router.post(
-    "/v1/accounts/sign-in",
+    "/v1/accounts/login",
     response_model=JwtResponse,
-    summary=str(swagger_configs.get_schemas()["accounts_sign_in"]["summary"]),
-    description=str(swagger_configs.get_schemas()["accounts_sign_in"]["description"]),
-    tags=list(swagger_configs.get_schemas()["accounts_sign_in"]["tags"]),
+    summary=str(swagger_configs.get_schemas()["accounts_login"]["summary"]),
+    description=str(swagger_configs.get_schemas()["accounts_login"]["description"]),
+    tags=list(swagger_configs.get_schemas()["accounts_login"]["tags"]),
 )
-async def sign_in(
-    request: AccountSignInRequest,
+async def login(
+    request: LoginRequest,
     db: Session = Depends(settings.get_db),
 ) -> JwtResponse:
     """
@@ -65,7 +62,7 @@ async def sign_in(
     tags=list(swagger_configs.get_schemas()["accounts_refresh_token"]["tags"]),
 )
 async def refresh_token(
-    request: AccountRefreshTokenRequest,
+    request: RefreshTokenRequest,
     db: Session = Depends(settings.get_db),
 ) -> JwtResponse:
     """

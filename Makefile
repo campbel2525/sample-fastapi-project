@@ -48,7 +48,7 @@ migration-reset: ## マイグレーションのリセット
 # 開発中のコマンドになる
 # 運用が始まったら使用しないこと
 	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run python app/console/commands/drop_all_tables.py
-	rm -rf common/api/migrations/versions/*
+	rm -rf apps/common/api/migrations/versions/*
 	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run alembic revision --autogenerate -m 'comment'
 	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run alembic upgrade head
 	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run python app/console/commands/seeds.py
@@ -93,11 +93,14 @@ check: ## コードフォーマット
 	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run flake8 .
 	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run mypy .
 # admin-front
-	docker compose -f $(pf) -p $(pn) exec -it admin-front npx prettier --write "**/*.ts"
-	docker compose -f $(pf) -p $(pn) exec -it admin-front npx eslint .
+	docker compose -f $(pf) -p $(pn) exec -it admin-front npx prettier .  --write
+	docker compose -f $(pf) -p $(pn) exec -it admin-front npx eslint . --fix
+# docker compose -f $(pf) -p $(pn) exec -it admin-front npm run check
 # user-front
-	docker compose -f $(pf) -p $(pn) exec -it user-front npx prettier --write "**/*.ts"
-	docker compose -f $(pf) -p $(pn) exec -it user-front npx eslint .
+	docker compose -f $(pf) -p $(pn) exec -it user-front npx prettier . --write
+	docker compose -f $(pf) -p $(pn) exec -it user-front npx eslint . --fix
+# docker compose -f $(pf) -p $(pn) exec -it user-front npm run check
+
 # テスト
 # mak test
 
@@ -110,22 +113,22 @@ user-api-run: ## サーバー起動
 admin-front-run: ## サーバー起動
 	docker compose -f $(pf) -p $(pn) exec -it admin-front npm run dev
 
-admin-front-run-preview: ## サーバー起動
-	docker compose -f $(pf) -p $(pn) exec -it admin-front npm run preview
+# admin-front-run-preview: ## サーバー起動
+# 	docker compose -f $(pf) -p $(pn) exec -it admin-front npm run preview
 
-admin-front-run-build: ## サーバー起動
+admin-front-build-run: ## サーバー起動
 	docker compose -f $(pf) -p $(pn) exec -it admin-front npm run build
-	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "HOST=0.0.0.0 PORT=3000 node build"
+	docker compose -f $(pf) -p $(pn) exec -it admin-front sh -c "HOST=0.0.0.0 PORT=3000 node build"
 
 user-front-run: ## サーバー起動
 	docker compose -f $(pf) -p $(pn) exec -it user-front npm run dev
 
-user-front-run-preview: ## サーバー起動
-	docker compose -f $(pf) -p $(pn) exec -it user-front npm run preview
+# user-front-run-preview: ## サーバー起動
+# 	docker compose -f $(pf) -p $(pn) exec -it user-front npm run preview
 
-user-front-run-build: ## サーバー起動
+user-front-build-run: ## サーバー起動
 	docker compose -f $(pf) -p $(pn) exec -it user-front npm run build
-	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "HOST=0.0.0.0 PORT=3000 node build"
+	docker compose -f $(pf) -p $(pn) exec -it user-front sh -c "HOST=0.0.0.0 PORT=3000 node build"
 
 # test: ## テスト
 # 	make admin-api-test
@@ -149,8 +152,10 @@ c: ## キャッシュ、ログ、ライブラリの削除
 # キャッシュの削除
 	rm -rf apps/admin-api/.mypy_cache
 	rm -rf apps/user-api/.mypy_cache
-	rm -rf apps/admin-front/.svelte-kit
-	rm -rf apps/user-front/.svelte-kit
+	rm -rf apps/admin-front/.next
+	rm -rf apps/admin-front/next-env.d.ts
+	rm -rf apps/user-front/.next
+	rm -rf apps/user-front/next-env.d.ts
 # ログの削除
 	rm -rf apps/admin-api/log/fastapi.log
 	rm -rf apps/admin-api/logs/sqlalchemy.log
@@ -172,6 +177,7 @@ push: ## push
 	git add .
 	git commit -m "Commit at $$(date +'%Y-%m-%d %H:%M:%S')"
 	git push origin main
+	git push origin main:prod
 
 # reset-commit: ## mainブランチのコミット履歴を1つにする
 # 	git checkout --orphan new-branch-name
@@ -205,8 +211,12 @@ github-check:
 	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run flake8 ."
 	docker compose -f $(pf) -p $(pn) exec -it user-api bash -c "pipenv run mypy ."
 # admin-front
-	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx prettier --check "**/*.ts""
+	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx prettier . --check"
 	docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npx eslint ."
+# docker compose -f $(pf) -p $(pn) exec -it admin-front bash -c "npm run check"
 # user-front
-	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx prettier --check "**/*.ts""
+	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx prettier . --check"
 	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx eslint ."
+# docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npm run check"
+
+#

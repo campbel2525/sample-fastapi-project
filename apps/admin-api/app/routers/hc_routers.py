@@ -17,4 +17,4 @@ router = APIRouter()
 async def send() -> HTMLResponse:
     """ヘルスチェック用のエンドポイント"""
 
-    return HTMLResponse(content="Healthy.", status_code=status.HTTP_200_OK)
+    return HTMLResponse(content="hello.", status_code=status.HTTP_200_OK)

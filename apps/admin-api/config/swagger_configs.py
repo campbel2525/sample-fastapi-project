@@ -3,7 +3,9 @@ from config import settings
 
 
 def get_schemas():
-    DEFAULT_MESSAGE = "ログインを行ってjwtを取得後、headerにaccess_tokenを設定してください。"
+    DEFAULT_MESSAGE = (
+        "ログインを行ってjwtを取得後、headerにaccess_tokenを設定してください。"
+    )
 
     return {
         "hc": {
@@ -12,7 +14,7 @@ def get_schemas():
             "description": "ヘルスチェック",
         },
         # accounts
-        "accounts_sign_in": {
+        "accounts_login": {
             "tags": ["accounts"],
             "summary": "ログイン",
             "description": "",
