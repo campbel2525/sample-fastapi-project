@@ -208,10 +208,10 @@ github-check:
 	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx prettier . --check"
 	docker compose -f $(pf) -p $(pn) exec -it user-front bash -c "npx eslint ."
 
-reset-commit: ## mainブランチのコミット履歴を1つにする 使用は控える
-	git checkout --orphan new-branch-name
-	git add .
-	git branch -D main
-	git branch -m main
-	git commit -m "first commit"
-	git push origin -f main
+# reset-commit: ## mainブランチのコミット履歴を1つにする 使用は控える
+# 	git checkout --orphan new-branch-name
+# 	git add .
+# 	git branch -D main
+# 	git branch -m main
+# 	git commit -m "first commit"
+# 	git push origin -f main
