@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+  # ---------------------------------
+  # database
+  # ---------------------------------
+  db:
+    image: mysql/mysql-server:8.0
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      # MYSQL_DATABASE: sqlalchemy # DBの作成はdocker/setup.dev.sqlにまとめた
+    volumes:
+      - db-data80:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - shared-network
+      - default
+
+  # ---------------------------------
+  # admin-api
+  # ---------------------------------
+  admin-api:
+    restart: "no"
+    tty: true
+    build:
+      context: ${ADMIN_API_CONTEXT}
+      dockerfile: docker/local/python/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:9000:9000" # デバッグ用
+      - "127.0.0.1:8000:8000" # webサーバー
+    volumes:
+      - ${ADMIN_API_CONTEXT}:/project
+      - ${API_DATABASE_CONTEXT}:/project/common/database
+      - ${API_MIGRATION_CONTEXT}:/project/migrations # common/migrationsにマウントはできない (SQLAlchemyのmigrateが動かない)
+    networks:
+      - shared-network
+      - default
+
+  # ---------------------------------
+  # user-api
+  # ---------------------------------
+  user-api:
+    restart: "no"
+    tty: true
+    build:
+      context: ${USER_API_CONTEXT}
+      dockerfile: docker/local/python/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:9001:9000" # デバッグ用
+      - "127.0.0.1:8001:8000" # webサーバー
+    volumes:
+      - ${USER_API_CONTEXT}:/project
+      - ${API_DATABASE_CONTEXT}:/project/common/database
+    networks:
+      - shared-network
+      - default
+
+  # ---------------------------------
+  # admin-front
+  # ---------------------------------
+  admin-front:
+    restart: "no"
+    tty: true
+    build:
+      context: ${ADMIN_FRONT_CONTEXT}
+      dockerfile: docker/local/nodejs/Dockerfile
+    ports:
+      - "127.0.0.1:3000:3000" # webサーバー
+    volumes:
+      - ${ADMIN_FRONT_CONTEXT}:/project
+
+  # ---------------------------------
+  # user-front
+  # ---------------------------------
+  user-front:
+    restart: "no"
+    tty: true
+    build:
+      context: ${USER_FRONT_CONTEXT}
+      dockerfile: docker/local/nodejs/Dockerfile
+    ports:
+      - "127.0.0.1:3001:3000" # webサーバー
+    volumes:
+      - ${USER_FRONT_CONTEXT}:/project
+
+volumes:
+  db-data80:
+
+networks:
+  shared-network:
+    name: ${PROJECT_NAME}-network

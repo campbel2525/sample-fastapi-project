@@ -1,0 +1,76 @@
+version: 0.2
+env:
+  # shell: bash
+  variables:
+    DOCKER_FILE_PATH_PYTHON: "apps/user-api/docker/aws/python/Dockerfile"
+
+phases:
+  install:
+    commands:
+      - echo Installing codebuild-extras...
+      - curl -fsSL https://raw.githubusercontent.com/easybib/aws-codebuild-extras/master/install >> extras.sh
+      - . ./extras.sh
+
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - env | grep 'CODEBUILD'
+      - IMAGE_TAG_HASH=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - IMAGE_TAG_BRANCH=$(echo ${CODEBUILD_WEBHOOK_HEAD_REF#refs/heads/} | sed -e "s@refs/tags/@@")
+      - IMAGE_TAG_BRANCH=${IMAGE_TAG_BRANCH:-re_execute_codebuild_task}
+
+      - ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+      - IMAGE_TAG_DATE=$(date '+%Y%m%d-%H%M%S')
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+
+      - APP_REPO_NAME=$PREFIX-app
+
+      - REPOSITORY_URI_APP=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$APP_REPO_NAME
+
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
+      - echo Logging in to Docker Hub...
+
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - echo "IMAGE_TAG_HASH=$IMAGE_TAG_HASH"
+      - echo "IMAGE_TAG_BRANCH=$IMAGE_TAG_BRANCH"
+      - echo "IMAGE_TAG_DATE=$IMAGE_TAG_DATE"
+      - echo "CODEBUILD_SOURCE_VERSION=${CODEBUILD_SOURCE_VERSION}"
+      - echo "APP_REPO_NAME=$APP_REPO_NAME"
+
+      - DOCKER_BUILDKIT=1 docker build -t $REPOSITORY_URI_APP:original -f $DOCKER_FILE_PATH_PYTHON .
+
+      - docker tag $REPOSITORY_URI_APP:original $REPOSITORY_URI_APP:$IMAGE_TAG_HASH
+      - docker tag $REPOSITORY_URI_APP:original $REPOSITORY_URI_APP:$IMAGE_TAG_BRANCH
+      - docker tag $REPOSITORY_URI_APP:original $REPOSITORY_URI_APP:$IMAGE_TAG_BRANCH-$IMAGE_TAG_DATE
+      - docker tag $REPOSITORY_URI_APP:original $REPOSITORY_URI_APP:latest
+
+      - echo Build completed on `date`
+  post_build:
+    commands:
+      - echo $AWS_DEFAULT_REGION
+      - echo $APP_REPO_NAME
+      - echo $IMAGE_TAG_HASH
+      - echo $IMAGE_TAG_BRANCH
+      - echo $REPOSITORY_URI_APP
+
+      - echo Pushing the Docker image to ECR...
+
+      - docker push $REPOSITORY_URI_APP:$IMAGE_TAG_HASH
+      - docker push $REPOSITORY_URI_APP:$IMAGE_TAG_BRANCH
+      - docker push $REPOSITORY_URI_APP:$IMAGE_TAG_BRANCH-$IMAGE_TAG_DATE
+      - docker push $REPOSITORY_URI_APP:latest
+
+      - echo Pushing to ECR completed on `date`
+      - echo completed all processes on `date`
+      - echo Writing image definitions file...
+
+      - printf '[{"name":"%s","imageUri":"%s"}]' $APP_REPO_NAME $REPOSITORY_URI_APP:$IMAGE_TAG_HASH > imagedefinitions-user-api.json
+      - cat imagedefinitions-user-api.json
+artifacts:
+  files: imagedefinitions-user-api.json

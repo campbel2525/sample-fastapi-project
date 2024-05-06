@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "admin-api",
+      "type": "python",
+      "request": "attach",
+      "port": 9000,
+      "host": "localhost",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/apps/admin-api",
+          "remoteRoot": "/project"
+        }
+      ]
+    },
+    {
+      "name": "user-api",
+      "type": "python",
+      "request": "attach",
+      "port": 9001,
+      "host": "localhost",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/apps/user-api",
+          "remoteRoot": "/project"
+        }
+      ]
+    }
+  ]
+}

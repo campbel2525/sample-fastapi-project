@@ -1,0 +1,39 @@
+version: 0.2
+env:
+  shell: bash
+  parameter-store:
+    SSM_ENV_VALUE: "/ecs/${PROJECT_NAME}/${ENVIRONMENT}/${APP_NAME}/.env"
+
+phases:
+  build:
+    commands:
+      - echo "copy env..."
+      - echo "${SSM_ENV_VALUE}" > apps/${APP_NAME}/.env
+      - echo apps/${APP_NAME}/.env
+
+      - echo "Building the Docker image..."
+      - DOCKER_BUILDKIT=1 docker build -f apps/${APP_NAME}/docker/aws/migration/Dockerfile . -t ${APP_NAME}
+
+      - echo "Running migrations..."
+      - docker run ${APP_NAME}
+
+artifacts:
+  files:
+    - "**/*"
+
+
+# ecrにビルド済みのものをecsで起動してマイグレーションを実行用にした方が以下もしれない
+# 下記のようなコマンドを実行することで、ECSタスクを実行することができます。
+# - name: Run ECS Task with Command Override
+#   id: run-migration-task
+#   run: |
+#     MIGRATION_TASK_ID=$(aws ecs run-task \
+#       --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
+#       --launch-type FARGATE \
+#       --task-definition ${{ steps.get-taskdef-migration1.outputs.taskdef-migration1 }} \
+#       --network-configuration "awsvpcConfiguration={subnets=[${{ secrets.AWS_SUBNET_ID1 }},${{ secrets.AWS_SUBNET_ID2 }}],securityGroups=[${{ secrets.AWS_SECURITY_GROUP_ADMIN_API }}],assignPublicIp=DISABLED}" \
+#       --overrides '{"containerOverrides":[{"name":"${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app","command":["pipenv", "run", "alembic", "upgrade", "head"]}]}' \
+#       --query 'tasks[0].taskArn' --output text)
+#     echo "MIGRATION_TASK_ID=$MIGRATION_TASK_ID" >> $GITHUB_ENV
+#     echo "::set-output name=migration-task-id::$MIGRATION_TASK_ID"
+#

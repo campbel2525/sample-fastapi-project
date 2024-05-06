@@ -1,0 +1,22 @@
+version: 0.2
+env:
+  shell: bash
+  parameter-store:
+    SSM_ENV_VALUE: "/ecs/${PROJECT_NAME}/${ENVIRONMENT}/${APP_NAME}/.env"
+
+phases:
+  build:
+    commands:
+      - echo "copy env..."
+      - echo "${SSM_ENV_VALUE}" > apps/${APP_NAME}/.env
+      - cat apps/${APP_NAME}/.env
+
+      - echo "Building the Docker image..."
+      - DOCKER_BUILDKIT=1 docker build -f apps/${APP_NAME}/docker/aws/python/Dockerfile .
+
+      - echo "Running migrations..."
+      - docker run ${APP_NAME} "pipenv run alembic upgrade head" || exit 1
+
+artifacts:
+  files:
+    - "**/*"

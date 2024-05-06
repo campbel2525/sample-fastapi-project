@@ -1,0 +1,45 @@
+# aws
+aws_access_key_id     = ""
+aws_secret_access_key = ""
+aws_region            = "ap-northeast-1"
+aws_account_id        = ""
+
+#東京リージョンのelbのアカウントIDのため固定
+aws_tokyo_elb_account_id = "582318560864"
+
+# プロジェクトごとの設定
+project_name = "ps"
+environment  = "prod"
+db_name      = "prod_ps_db"
+
+# github
+github_owner                     = "xxxxx"
+github_token                     = ""
+target_repository                = "project-sample"
+target_branch                    = "prod"
+aws_codepipeline_webhook_secret  = "VeryRandomStringMoreThan20Byte"
+github_repository_webhook_secret = "VeryRandomStringMoreThan20Byte"
+github_repository_url            = "https://github.com/xxxxx/project-sample"
+
+# route53
+aws_route53_record_zone_id = ""
+
+# acm arn 後ほど設定
+tokyo_cert_arn    = ""
+virginia_cert_arn = ""
+
+# aws lb listener
+aws_lb_listener_http_arn  = ""
+aws_lb_listener_https_arn = ""
+
+# app name
+admin_api_name   = "admin-api"
+user_api_name    = "user-api"
+admin_front_name = "admin-front"
+user_front_name  = "user-front"
+
+# app domain
+admin_api_domain   = "admin-api-project-sample.example.com"
+user_api_domain    = "user-api-project-sample.example.com"
+admin_front_domain = "admin-project-sample.example.com"
+user_front_domain  = "project-sample.example.com"
