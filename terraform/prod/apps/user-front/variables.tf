@@ -58,10 +58,6 @@ variable "github_repository_webhook_secret" {
   type = string
 }
 
-variable "github_repository_url" {
-  type = string
-}
-
 # route53
 variable "aws_route53_record_zone_id" {
   type = string

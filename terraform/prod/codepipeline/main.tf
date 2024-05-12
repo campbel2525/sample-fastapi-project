@@ -60,19 +60,3 @@ resource "random_string" "artifact_bucket" {
   upper   = false
   special = false
 }
-
-# module "amplify" {
-#   source = "../modules/amplify"
-
-#   app_name       = "${var.project_name}-${var.environment}-admin-front"
-#   repository_url = var.github_repository_url
-#   oauth_token    = var.github_token
-# }
-
-
-# module "s3" {
-#   source          = "../modules/s3"
-#   project         = var.project
-#   environment     = var.environment
-#   user_front_name = var.user_front_name
-# }
