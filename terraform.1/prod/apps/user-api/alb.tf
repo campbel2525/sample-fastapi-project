@@ -8,7 +8,7 @@ resource "aws_lb_target_group" "alb_app_target_group" {
   vpc_id               = module.network.vpc_id
   port                 = 8001
   protocol             = "HTTP"
-  deregistration_delay = 10 # 登録解除の待機時間
+  deregistration_delay = 10 # 登録解除の遅延時間
 
   tags = {
     Name    = "${var.project_name}-${var.environment}-alb-user-api-tg"

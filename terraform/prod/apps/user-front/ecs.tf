@@ -23,9 +23,9 @@ resource "aws_ecs_task_definition" "ecs_app" {
         },
         "portMappings": [
           {
-            "hostPort": 3001,
+            "hostPort": 3000,
             "protocol": "tcp",
-            "containerPort": 3001
+            "containerPort": 3000
           }
         ],
         "environment": [],
