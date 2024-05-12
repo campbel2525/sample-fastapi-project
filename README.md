@@ -235,5 +235,3 @@ The deployment flow is as follows:
 4. Both the front and back ends are built
 5. Build the admin-api for migration and run the migration (Building here is useless. Why not just use what was built in the previous step?)
 6. Deploy each of the above four projects
-
-#
