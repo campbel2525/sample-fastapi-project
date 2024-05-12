@@ -57,20 +57,20 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
 
-    # # user-api
-    # action {
-    #   name             = "Build_UserApi"
-    #   category         = "Build"
-    #   owner            = "AWS"
-    #   provider         = "CodeBuild"
-    #   version          = 1
-    #   input_artifacts  = ["SourceArtifact"]
-    #   output_artifacts = ["BuildArtifact_UserApi"]
+    # user-api
+    action {
+      name             = "Build_UserApi"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact_UserApi"]
 
-    #   configuration = {
-    #     ProjectName = aws_codebuild_project.user_api.id
-    #   }
-    # }
+      configuration = {
+        ProjectName = aws_codebuild_project.user_api.id
+      }
+    }
 
     # admin-front
     action {
@@ -87,43 +87,43 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
 
-    # # user-front
-    # action {
-    #   name             = "Build_UserFront"
-    #   category         = "Build"
-    #   owner            = "AWS"
-    #   provider         = "CodeBuild"
-    #   version          = 1
-    #   input_artifacts  = ["SourceArtifact"]
-    #   output_artifacts = ["BuildArtifact_UserFront"]
+    # user-front
+    action {
+      name             = "Build_UserFront"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact_UserFront"]
 
-    #   configuration = {
-    #     ProjectName = aws_codebuild_project.user_front.id
-    #   }
-    # }
+      configuration = {
+        ProjectName = aws_codebuild_project.user_front.id
+      }
+    }
   }
 
   # ---------------------------------------------
   # predeployステージ (マイグレーションを行う)
   # admin-apiのマイグレーションを実行する
   # ---------------------------------------------
-  stage {
-    name = "PreDeploy"
+  # stage {
+  #   name = "PreDeploy"
 
-    action {
-      name             = "Build_Migration_PreDeploy"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = 1
-      input_artifacts  = ["SourceArtifact"]
-      output_artifacts = ["PreDeployOutput_Migration"]
+  #   action {
+  #     name             = "Build_Migration_PreDeploy"
+  #     category         = "Build"
+  #     owner            = "AWS"
+  #     provider         = "CodeBuild"
+  #     version          = 1
+  #     input_artifacts  = ["SourceArtifact"]
+  #     output_artifacts = ["PreDeployOutput_Migration"]
 
-      configuration = {
-        ProjectName = aws_codebuild_project.predploy.id
-      }
-    }
-  }
+  #     configuration = {
+  #       ProjectName = aws_codebuild_project.predploy.id
+  #     }
+  #   }
+  # }
 
   # ---------------------------------------------
   # deproyステージ (ECSへDockerイメージをデプロイする)
@@ -149,23 +149,23 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
 
-    # # user-api
-    # action {
-    #   name            = "Deploy_UserApi"
-    #   category        = "Deploy"
-    #   owner           = "AWS"
-    #   provider        = "ECS"
-    #   version         = 1
-    #   input_artifacts = ["BuildArtifact_UserApi"]
+    # user-api
+    action {
+      name            = "Deploy_UserApi"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = 1
+      input_artifacts = ["BuildArtifact_UserApi"]
 
-    #   configuration = {
-    #     ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
-    #     ServiceName = "${var.project_name}-${var.environment}-user-api-app"
-    #     # 以下のFilenameにprodなどにしなくていい？
-    #     # buildspec-user-api.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
-    #     FileName = "imagedefinitions-user-api.json"
-    #   }
-    # }
+      configuration = {
+        ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
+        ServiceName = "${var.project_name}-${var.environment}-user-api-app"
+        # 以下のFilenameにprodなどにしなくていい？
+        # buildspec-user-api.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
+        FileName = "imagedefinitions-user-api.json"
+      }
+    }
 
     # admin-front
     action {
@@ -185,23 +185,23 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
 
-    # # user-front
-    # action {
-    #   name            = "Deploy_UserFront"
-    #   category        = "Deploy"
-    #   owner           = "AWS"
-    #   provider        = "ECS"
-    #   version         = 1
-    #   input_artifacts = ["BuildArtifact_UserFront"]
+    # user-front
+    action {
+      name            = "Deploy_UserFront"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = 1
+      input_artifacts = ["BuildArtifact_UserFront"]
 
-    #   configuration = {
-    #     ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
-    #     ServiceName = "${var.project_name}-${var.environment}-user-front-app"
-    #     # 以下のFilenameにprodなどにしなくていい？
-    #     # buildspec-user-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
-    #     FileName = "imagedefinitions-user-front.json"
-    #   }
-    # }
+      configuration = {
+        ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
+        ServiceName = "${var.project_name}-${var.environment}-user-front-app"
+        # 以下のFilenameにprodなどにしなくていい？
+        # buildspec-user-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
+        FileName = "imagedefinitions-user-front.json"
+      }
+    }
   }
 }
 

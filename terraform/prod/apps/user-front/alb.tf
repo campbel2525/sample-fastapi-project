@@ -89,7 +89,7 @@ resource "aws_lb_target_group" "alb_app_target_group" {
   }
 
   health_check {
-    path                = "/hc"          # ヘルスチェックで使用するパス
+    path                = "/"            # ヘルスチェックで使用するパス
     healthy_threshold   = 2              # 正常判定を行うまでのヘルスチェック実行回数
     unhealthy_threshold = 2              # 異常判定を行うまでのヘルスチェック実行回数
     timeout             = 2              # ヘルスチェックのタイムアウト時間（秒）
