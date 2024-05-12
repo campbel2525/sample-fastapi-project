@@ -4,7 +4,7 @@
 # ---------------------------------------------
 # alb log
 resource "aws_s3_bucket" "alb_log" {
-  bucket        = "terraform-${var.project_name}-${var.environment}-alb-log-${random_string.random.result}"
+  bucket        = "${var.project_name}-${var.environment}-admin-api-alb-log"
   force_destroy = true
 }
 

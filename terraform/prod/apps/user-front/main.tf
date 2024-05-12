@@ -49,9 +49,3 @@ module "security_group" {
   project_name = var.project_name
   environment  = var.environment
 }
-
-module "alb" {
-  source       = "../../modules/alb"
-  project_name = var.project_name
-  environment  = var.environment
-}

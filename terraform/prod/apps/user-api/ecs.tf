@@ -52,7 +52,7 @@ resource "aws_ecs_service" "ecs_app" {
 
   network_configuration {
     assign_public_ip = false
-    security_groups  = [aws_security_group.app_sg.id]
+    security_groups  = [module.security_group.ecs_app_sg_id]
 
     subnets = [
       module.network.private_subnet_1a_id,
@@ -63,7 +63,7 @@ resource "aws_ecs_service" "ecs_app" {
   load_balancer {
     target_group_arn = aws_lb_target_group.alb_app_target_group.arn
     container_name   = "${var.project_name}-${var.environment}-user-api-app"
-    container_port   = 8001
+    container_port   = 8000
   }
 
   lifecycle {
@@ -73,10 +73,6 @@ resource "aws_ecs_service" "ecs_app" {
   depends_on = [
     aws_ecs_task_definition.ecs_app,
     aws_lb_target_group.alb_app_target_group,
-    aws_security_group.app_sg,
-    aws_security_group_rule.ecs_only_from_alb_in_http,
-    aws_security_group_rule.ecs_only_from_alb_out_all,
-    aws_security_group_rule.db_in_tcp3306_from_ecs_only_from_alb_sg
   ]
 }
 

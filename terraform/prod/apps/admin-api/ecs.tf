@@ -52,7 +52,7 @@ resource "aws_ecs_service" "ecs_app" {
 
   network_configuration {
     assign_public_ip = false
-    security_groups  = [aws_security_group.app_sg.id]
+    security_groups  = [module.security_group.ecs_app_sg_id]
 
     subnets = [
       module.network.private_subnet_1a_id,
@@ -70,14 +70,10 @@ resource "aws_ecs_service" "ecs_app" {
     ignore_changes = [task_definition]
   }
 
-  depends_on = [
-    aws_ecs_task_definition.ecs_app,
-    aws_lb_target_group.alb_app_target_group,
-    aws_security_group.app_sg,
-    aws_security_group_rule.ecs_only_from_alb_in_http,
-    aws_security_group_rule.ecs_only_from_alb_out_all,
-    aws_security_group_rule.db_in_tcp3306_from_ecs_only_from_alb_sg
-  ]
+  # depends_on = [
+  #   aws_ecs_task_definition.ecs_app,
+  #   aws_lb_target_group.alb_app_target_group,
+  # ]
 }
 
 resource "aws_cloudwatch_log_group" "app" {

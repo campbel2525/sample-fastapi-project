@@ -93,35 +93,16 @@ make cp-env
 6
 
 ```
-make apply1
+make apply
 ```
 
-7
-aws のマネコンから aws lb listener arn を取得して terraform/prod/terraform.tfvars にセットする
-セットするのは下記の項目
-
-- aws_lb_listener_http_arn
-- aws_lb_listener_https_arn
-
-その後下記のコマンド実行する
-
-```
-make cp-env
-```
-
-8
-
-```
-make apply2
-```
-
-9  
+7  
 rds のパスワードを書き換える
 ssm にプロジェクトの.env を登録する  
 (github との連携を手動で行う)
 codepipeline の Source の編集で github の認証情報の「保留中の接続を更新」を完了させる。一旦画面を開いて閉じてから再度開く必要がある
 
-10  
+8  
 githubprod ブランチに push する
 
 # その他

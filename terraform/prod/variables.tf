@@ -76,15 +76,6 @@ variable "virginia_cert_arn" {
   type = string
 }
 
-# aws lb listener arn
-variable "aws_lb_listener_http_arn" {
-  type = string
-}
-
-variable "aws_lb_listener_https_arn" {
-  type = string
-}
-
 # アプリ名
 variable "admin_api_name" {
   type = string

@@ -4,13 +4,10 @@ help: ## ヘルプを表示
 tf-fmt: ## 再起的にfmt
 	terraform fmt --recursive
 
-apply1: ## apply1
+apply: ## apply
 	cd network && terraform init -migrate-state && terraform apply -auto-approve
 	cd rds/db1 && terraform init -migrate-state && terraform apply -auto-approve
 	cd apps/common/ecs_cluster && terraform init -migrate-state && terraform apply -auto-approve
-	cd apps/common/alb && terraform init -migrate-state && terraform apply -auto-approve
-
-apply2: ## apply2
 	cd apps/admin-api && terraform init -migrate-state && terraform apply -auto-approve
 	cd apps/user-api && terraform init -migrate-state && terraform apply -auto-approve
 	cd apps/admin-front && terraform init -migrate-state && terraform apply -auto-approve
@@ -26,7 +23,6 @@ destroy: ## all destroy
 	cd apps/user-front && terraform destroy -auto-approve
 # cd ssm_parameter && terraform destroy -auto-approve
 	cd codepipeline && terraform destroy -auto-approve
-	cd apps/common/alb && terraform destroy -auto-approve
 	cd apps/common/ecs_cluster && terraform destroy -auto-approve
 	cd rds/db1 && terraform destroy -auto-approve
 	cd banstion && terraform destroy -auto-approve
@@ -37,7 +33,6 @@ cp-env: ## envのコピー
 	cp variables.tf network/variables.tf
 	cp variables.tf rds/db1/variables.tf
 	cp variables.tf apps/common/ecs_cluster/variables.tf
-	cp variables.tf apps/common/alb/variables.tf
 	cp variables.tf apps/admin-api/variables.tf
 	cp variables.tf apps/admin-front/variables.tf
 	cp variables.tf apps/user-api/variables.tf
@@ -49,7 +44,6 @@ cp-env: ## envのコピー
 	cp terraform.tfvars network/terraform.tfvars
 	cp terraform.tfvars rds/db1/terraform.tfvars
 	cp terraform.tfvars apps/common/ecs_cluster/terraform.tfvars
-	cp terraform.tfvars apps/common/alb/terraform.tfvars
 	cp terraform.tfvars apps/admin-api/terraform.tfvars
 	cp terraform.tfvars apps/admin-front/terraform.tfvars
 	cp terraform.tfvars apps/user-api/terraform.tfvars
@@ -63,7 +57,6 @@ all-cler: ## all cler
 	rm -rf network/.terraform
 	rm -rf rds/db1/.terraform
 	rm -rf apps/common/ecs_cluster/.terraform
-	rm -rf apps/common/alb/.terraform
 	rm -rf apps/admin-api/.terraform
 	rm -rf apps/admin-front/.terraform
 	rm -rf apps/user-api/.terraform
@@ -75,7 +68,6 @@ all-cler: ## all cler
 	rm -rf network/.terraform.lock.hcl
 	rm -rf rds/db1/.terraform.lock.hcl
 	rm -rf apps/common/ecs_cluster/.terraform.lock.hcl
-	rm -rf apps/common/alb/.terraform.lock.hcl
 	rm -rf apps/admin-api/.terraform.lock.hcl
 	rm -rf apps/admin-front/.terraform.lock.hcl
 	rm -rf apps/user-api/.terraform.lock.hcl

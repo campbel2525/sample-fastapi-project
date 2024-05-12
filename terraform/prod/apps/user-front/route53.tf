@@ -8,8 +8,8 @@ resource "aws_route53_record" "route53_record" {
   type    = "A"                            # レコードタイプ
 
   alias {
-    name                   = module.alb.alb_dns_name
-    zone_id                = module.alb.alb_zone_id
+    name                   = aws_lb.alb_api.dns_name
+    zone_id                = aws_lb.alb_api.zone_id
     evaluate_target_health = true
   }
 }

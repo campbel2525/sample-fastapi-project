@@ -19,11 +19,11 @@ phases:
 
 artifacts:
   files:
-    - "**/*"
+#     - "**/*"
 
 
-# ecrにビルド済みのものをecsで起動してマイグレーションを実行用にした方が以下もしれない
-# 下記のようなコマンドを実行することで、ECSタスクを実行することができます。
+# # ecrにビルド済みのものをecsで起動してマイグレーションを実行用にした方がいいかもしれない
+# # 下記のようなコマンドを実行することで、ECSタスクを実行することができます。
 # - name: Run ECS Task with Command Override
 #   id: run-migration-task
 #   run: |
@@ -36,4 +36,8 @@ artifacts:
 #       --query 'tasks[0].taskArn' --output text)
 #     echo "MIGRATION_TASK_ID=$MIGRATION_TASK_ID" >> $GITHUB_ENV
 #     echo "::set-output name=migration-task-id::$MIGRATION_TASK_ID"
-#
+
+#     # マイグレーションタスクが完了するまで待機
+#     aws ecs wait tasks-stopped \
+#       --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
+#       --tasks $MIGRATION_TASK_ID

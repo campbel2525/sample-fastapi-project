@@ -85,7 +85,7 @@ alb をアプリごとに 1 個ずつにする場合
 alb
 
 - https://aws.amazon.com/jp/elasticloadbalancing/pricing/
-- 32.76 USD/月 = 4914
+- 32.76 USD/月 = 4914 円
 
 ecs
 

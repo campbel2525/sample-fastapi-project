@@ -6,13 +6,13 @@ data "aws_security_group" "alb_sg" {
   }
 }
 
-# data "aws_security_group" "ecs_only_from_alb_sg" {
-#   tags = {
-#     Name    = "${var.project_name}-${var.environment}-ecs-only-from-alb-sg"
-#     Project = var.project_name
-#     Env     = var.environment
-#   }
-# }
+data "aws_security_group" "ecs_app_sg" {
+  tags = {
+    Name    = "${var.project_name}-${var.environment}-ecs-app-sg"
+    Project = var.project_name
+    Env     = var.environment
+  }
+}
 
 data "aws_security_group" "db_sg" {
   tags = {
