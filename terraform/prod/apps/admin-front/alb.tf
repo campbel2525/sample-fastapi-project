@@ -18,7 +18,7 @@ resource "aws_lb" "alb_app" {
   ]
 
   access_logs {
-    bucket  = aws_s3_bucket.alb_log.arn
+    bucket  = aws_s3_bucket.alb_log.id
     enabled = true
   }
 }
@@ -78,7 +78,7 @@ resource "aws_lb_target_group" "alb_app_target_group" {
   name                 = "${var.project_name}-${var.environment}-admin-front-alb-tg"
   target_type          = "ip"
   vpc_id               = module.network.vpc_id
-  port                 = 3000
+  port                 = 8000
   protocol             = "HTTP"
   deregistration_delay = 10 # 登録解除の遅延時間
 
@@ -89,7 +89,7 @@ resource "aws_lb_target_group" "alb_app_target_group" {
   }
 
   health_check {
-    path                = "/"            # ヘルスチェックで使用するパス
+    path                = "/hc"          # ヘルスチェックで使用するパス
     healthy_threshold   = 2              # 正常判定を行うまでのヘルスチェック実行回数
     unhealthy_threshold = 2              # 異常判定を行うまでのヘルスチェック実行回数
     timeout             = 2              # ヘルスチェックのタイムアウト時間（秒）

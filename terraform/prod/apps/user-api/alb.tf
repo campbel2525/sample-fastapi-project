@@ -18,7 +18,7 @@ resource "aws_lb" "alb_app" {
   ]
 
   access_logs {
-    bucket  = aws_s3_bucket.alb_log.arn
+    bucket  = aws_s3_bucket.alb_log.id
     enabled = true
   }
 }

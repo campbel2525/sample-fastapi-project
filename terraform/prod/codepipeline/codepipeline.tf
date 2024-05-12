@@ -72,20 +72,20 @@ resource "aws_codepipeline" "codepipeline" {
     #   }
     # }
 
-    # # admin-front
-    # action {
-    #   name             = "Build_AdminFront"
-    #   category         = "Build"
-    #   owner            = "AWS"
-    #   provider         = "CodeBuild"
-    #   version          = 1
-    #   input_artifacts  = ["SourceArtifact"]
-    #   output_artifacts = ["BuildArtifact_AdminFront"]
+    # admin-front
+    action {
+      name             = "Build_AdminFront"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact_AdminFront"]
 
-    #   configuration = {
-    #     ProjectName = aws_codebuild_project.admin_front.id
-    #   }
-    # }
+      configuration = {
+        ProjectName = aws_codebuild_project.admin_front.id
+      }
+    }
 
     # # user-front
     # action {
@@ -167,23 +167,23 @@ resource "aws_codepipeline" "codepipeline" {
     #   }
     # }
 
-    # # admin-front
-    # action {
-    #   name            = "Deploy_AdminFront"
-    #   category        = "Deploy"
-    #   owner           = "AWS"
-    #   provider        = "ECS"
-    #   version         = 1
-    #   input_artifacts = ["BuildArtifact_AdminFront"]
+    # admin-front
+    action {
+      name            = "Deploy_AdminFront"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = 1
+      input_artifacts = ["BuildArtifact_AdminFront"]
 
-    #   configuration = {
-    #     ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
-    #     ServiceName = "${var.project_name}-${var.environment}-admin-front-app"
-    #     # 以下のFilenameにprodなどにしなくていい？
-    #     # buildspec-admin-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
-    #     FileName = "imagedefinitions-admin-front.json"
-    #   }
-    # }
+      configuration = {
+        ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
+        ServiceName = "${var.project_name}-${var.environment}-admin-front-app"
+        # 以下のFilenameにprodなどにしなくていい？
+        # buildspec-admin-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
+        FileName = "imagedefinitions-admin-front.json"
+      }
+    }
 
     # # user-front
     # action {

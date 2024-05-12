@@ -23,9 +23,9 @@ resource "aws_ecs_task_definition" "ecs_app" {
         },
         "portMappings": [
           {
-            "hostPort": 3000,
+            "hostPort": 8000,
             "protocol": "tcp",
-            "containerPort": 3000
+            "containerPort": 8000
           }
         ],
         "environment": [],
@@ -63,7 +63,7 @@ resource "aws_ecs_service" "ecs_app" {
   load_balancer {
     target_group_arn = aws_lb_target_group.alb_app_target_group.arn
     container_name   = "${var.project_name}-${var.environment}-admin-front-app"
-    container_port   = 3000
+    container_port   = 8000
   }
 
   lifecycle {
