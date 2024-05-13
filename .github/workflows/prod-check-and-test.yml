@@ -3,7 +3,7 @@ name: Check and Test
 on:
   push:
     branches:
-      - stg
+      - prod
     paths-ignore:
       - '**.md'
       - 'Makefile'
