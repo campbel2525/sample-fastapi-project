@@ -7,11 +7,6 @@ env:
 phases:
   pre_build:
     commands:
-      - echo ${AWS_ACCOUNT_ID}
-      - echo ${AWS_REGION}
-      - echo ${PROJECT_NAME}
-      - echo ${ENVIRONMENT}
-
       - echo Logging in to Amazon ECR...
       - aws --version
       - export AWS_LOGIN_PASSWORD=$(aws ecr get-login-password --region $AWS_REGION)
