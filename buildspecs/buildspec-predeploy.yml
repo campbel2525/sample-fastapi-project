@@ -67,6 +67,7 @@ phases:
       - docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest
       - echo Running migration script...
       - echo "${SSM_ENV_VALUE}" > .env
+      - cat .env
       - docker run --env-file .env ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest pipenv run alembic upgrade head
   post_build:
     commands:
