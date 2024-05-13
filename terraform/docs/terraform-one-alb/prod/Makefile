@@ -1,7 +1,7 @@
 help: ## ヘルプを表示
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-tf-fmt: ## 再起的にfmt
+fmt: ## 再起的にfmt
 	terraform fmt --recursive
 
 apply1: ## apply1
