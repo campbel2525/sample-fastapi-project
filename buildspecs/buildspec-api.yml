@@ -5,10 +5,10 @@ phases:
     commands:
       - echo "setting variables..."
       - APP_REPO_NAME=${PROJECT_NAME}-${ENVIRONMENT}-${APP_NAME}-app
-      - REPOSITORY_URI_APP=$AWS_ACCOUNT_ID.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${APP_REPO_NAME}
+      - REPOSITORY_URI_APP=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${APP_REPO_NAME}
 
       - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
   build:
     on-failure: ABORT
     commands:

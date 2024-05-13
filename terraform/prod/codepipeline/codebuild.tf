@@ -105,6 +105,11 @@ resource "aws_codebuild_project" "admin_api" {
       name  = "AWS_ACCOUNT_ID"
       value = var.aws_account_id
     }
+
+    environment_variable {
+      name  = "AWS_REGION"
+      value = var.aws_region
+    }
   }
 }
 
@@ -150,6 +155,11 @@ resource "aws_codebuild_project" "admin_front" {
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       value = var.aws_account_id
+    }
+
+    environment_variable {
+      name  = "AWS_REGION"
+      value = var.aws_region
     }
   }
 }
@@ -198,6 +208,11 @@ resource "aws_codebuild_project" "user_api" {
       name  = "AWS_ACCOUNT_ID"
       value = var.aws_account_id
     }
+
+    environment_variable {
+      name  = "AWS_REGION"
+      value = var.aws_region
+    }
   }
 }
 
@@ -243,6 +258,11 @@ resource "aws_codebuild_project" "user_front" {
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       value = var.aws_account_id
+    }
+
+    environment_variable {
+      name  = "AWS_REGION"
+      value = var.aws_region
     }
   }
 }

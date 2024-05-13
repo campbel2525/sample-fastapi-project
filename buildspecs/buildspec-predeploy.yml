@@ -50,13 +50,18 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - $(aws ecr get-login-password --region ${{ AWS_REGION }}) | docker login --username AWS --password-stdin ${{ AWS_ACCOUNT_ID }}.dkr.ecr.${{ AWS_REGION }}.amazonaws.com
+      - $(aws ecr get-login-password --region ${AWS_REGION}) | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
   build:
     commands:
+      - echo ${AWS_ACCOUNT_ID}
+      - echo ${AWS_REGION}
+      - echo ${PROJECT_NAME}
+      - echo ${ENVIRONMENT}
+
       - echo Pulling Docker image from ECR...
-      - docker pull ${{ AWS_ACCOUNT_ID }}.dkr.ecr.${{ AWS_REGION }}.amazonaws.com/${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app:latest
+      - docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest
       - echo Running migration script...
-      - docker run ${{ AWS_ACCOUNT_ID }}.dkr.ecr.${{ AWS_REGION }}.amazonaws.com/${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app:latest pipenv run alembic upgrade head
+      - docker run ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest pipenv run alembic upgrade head
   post_build:
     commands:
       - echo Migration completed.
