@@ -66,7 +66,7 @@ phases:
       - echo Pulling Docker image from ECR...
       - docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest
       - echo Running migration script...
-      - docker run --env-file ${SSM_ENV_VALUE} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest pipenv run alembic upgrade head
+      - docker run --env ${SSM_ENV_VALUE} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${PROJECT_NAME}-${ENVIRONMENT}-admin-api-app:latest pipenv run alembic upgrade head
   post_build:
     commands:
       - echo Migration completed.
