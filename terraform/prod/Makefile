@@ -9,9 +9,9 @@ apply: ## apply
 	cd rds/db1 && terraform init -migrate-state && terraform apply -auto-approve
 	cd apps/common/ecs_cluster && terraform init -migrate-state && terraform apply -auto-approve
 	cd apps/admin-api && terraform init -migrate-state && terraform apply -auto-approve
-# cd apps/user-api && terraform init -migrate-state && terraform apply -auto-approve
+	cd apps/user-api && terraform init -migrate-state && terraform apply -auto-approve
 	cd apps/admin-front && terraform init -migrate-state && terraform apply -auto-approve
-# cd apps/user-front && terraform init -migrate-state && terraform apply -auto-approve
+	cd apps/user-front && terraform init -migrate-state && terraform apply -auto-approve
 	cd codepipeline && terraform init -migrate-state && terraform apply -auto-approve
 # cd ssm_parameter && terraform init -migrate-state && terraform apply -auto-approve
 	cd banstion && terraform init -migrate-state && terraform apply -auto-approve

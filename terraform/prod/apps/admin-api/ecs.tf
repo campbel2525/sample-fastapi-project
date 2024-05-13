@@ -70,10 +70,10 @@ resource "aws_ecs_service" "ecs_app" {
     ignore_changes = [task_definition]
   }
 
-  # depends_on = [
-  #   aws_ecs_task_definition.ecs_app,
-  #   aws_lb_target_group.alb_app_target_group,
-  # ]
+  depends_on = [
+    aws_ecs_task_definition.ecs_app,
+    aws_lb_target_group.alb_app_target_group,
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "app" {

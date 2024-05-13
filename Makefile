@@ -105,10 +105,12 @@ check: ## コードフォーマット
 # mak test
 
 admin-api-run: ## サーバー起動
-	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run uvicorn main:app --host 0.0.0.0 --reload --port 8000
+# docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run uvicorn main:app --host 0.0.0.0 --reload --port 8000
+	docker compose -f $(pf) -p $(pn) exec -it admin-api pipenv run gunicorn --workers 1 --worker-class uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --timeout 120
 
 user-api-run: ## サーバー起動
-	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run uvicorn main:app --host 0.0.0.0 --reload --port 8000
+# docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run uvicorn main:app --host 0.0.0.0 --reload --port 8000
+	docker compose -f $(pf) -p $(pn) exec -it user-api pipenv run gunicorn --workers 1 --worker-class uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --timeout 120
 
 admin-front-run: ## サーバー起動
 	docker compose -f $(pf) -p $(pn) exec -it admin-front npm run dev

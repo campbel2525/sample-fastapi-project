@@ -56,8 +56,18 @@ resource "aws_security_group" "db_sg" {
   }
 }
 
+# app(ecs)からのみ受け付ける
+resource "aws_security_group_rule" "db_in_tcp3306_from_ecs_api_sgr" {
+  security_group_id        = aws_security_group.db_sg.id
+  type                     = "ingress"
+  protocol                 = "tcp"
+  from_port                = 3306
+  to_port                  = 3306
+  source_security_group_id = aws_security_group.ecs_app_sg.id
+}
+
 # codebuild->db
-resource "aws_security_group_rule" "db_in_tcp3306_from_codebuild_sg" {
+resource "aws_security_group_rule" "db_in_tcp3306_from_codebuild_sgr" {
   security_group_id        = aws_security_group.db_sg.id
   type                     = "ingress"
   protocol                 = "tcp"
@@ -67,7 +77,7 @@ resource "aws_security_group_rule" "db_in_tcp3306_from_codebuild_sg" {
 }
 
 # ec2->db
-resource "aws_security_group_rule" "db_in_tcp3306_from_ec2_sg" {
+resource "aws_security_group_rule" "db_in_tcp3306_from_ec2_sgr" {
   security_group_id        = aws_security_group.db_sg.id
   type                     = "ingress"
   protocol                 = "tcp"
@@ -75,6 +85,7 @@ resource "aws_security_group_rule" "db_in_tcp3306_from_ec2_sg" {
   to_port                  = 3306
   source_security_group_id = aws_security_group.ec2_sg.id
 }
+
 
 resource "aws_security_group_rule" "db_out_all" {
   security_group_id = aws_security_group.db_sg.id

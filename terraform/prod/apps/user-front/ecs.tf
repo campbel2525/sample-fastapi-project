@@ -73,8 +73,6 @@ resource "aws_ecs_service" "ecs_app" {
   depends_on = [
     aws_ecs_task_definition.ecs_app,
     aws_lb_target_group.alb_app_target_group,
-    aws_security_group_rule.ecs_only_from_alb_in_http,
-    aws_security_group_rule.ecs_only_from_alb_out_all,
   ]
 }
 

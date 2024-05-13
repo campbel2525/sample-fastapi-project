@@ -107,23 +107,23 @@ resource "aws_codepipeline" "codepipeline" {
   # predeployステージ (マイグレーションを行う)
   # admin-apiのマイグレーションを実行する
   # ---------------------------------------------
-  # stage {
-  #   name = "PreDeploy"
+  stage {
+    name = "PreDeploy"
 
-  #   action {
-  #     name             = "Build_Migration_PreDeploy"
-  #     category         = "Build"
-  #     owner            = "AWS"
-  #     provider         = "CodeBuild"
-  #     version          = 1
-  #     input_artifacts  = ["SourceArtifact"]
-  #     output_artifacts = ["PreDeployOutput_Migration"]
+    action {
+      name             = "Build_Migration_PreDeploy"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["PreDeployOutput_Migration"]
 
-  #     configuration = {
-  #       ProjectName = aws_codebuild_project.predploy.id
-  #     }
-  #   }
-  # }
+      configuration = {
+        ProjectName = aws_codebuild_project.predploy.id
+      }
+    }
+  }
 
   # ---------------------------------------------
   # deproyステージ (ECSへDockerイメージをデプロイする)
