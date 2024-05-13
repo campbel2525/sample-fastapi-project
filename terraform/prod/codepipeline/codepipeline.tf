@@ -57,50 +57,50 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
 
-    # # user-api
-    # action {
-    #   name             = "Build_UserApi"
-    #   category         = "Build"
-    #   owner            = "AWS"
-    #   provider         = "CodeBuild"
-    #   version          = 1
-    #   input_artifacts  = ["SourceArtifact"]
-    #   output_artifacts = ["BuildArtifact_UserApi"]
+    # user-api
+    action {
+      name             = "Build_UserApi"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact_UserApi"]
 
-    #   configuration = {
-    #     ProjectName = aws_codebuild_project.user_api.id
-    #   }
-    # }
+      configuration = {
+        ProjectName = aws_codebuild_project.user_api.id
+      }
+    }
 
-    # # admin-front
-    # action {
-    #   name             = "Build_AdminFront"
-    #   category         = "Build"
-    #   owner            = "AWS"
-    #   provider         = "CodeBuild"
-    #   version          = 1
-    #   input_artifacts  = ["SourceArtifact"]
-    #   output_artifacts = ["BuildArtifact_AdminFront"]
+    # admin-front
+    action {
+      name             = "Build_AdminFront"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact_AdminFront"]
 
-    #   configuration = {
-    #     ProjectName = aws_codebuild_project.admin_front.id
-    #   }
-    # }
+      configuration = {
+        ProjectName = aws_codebuild_project.admin_front.id
+      }
+    }
 
-    # # user-front
-    # action {
-    #   name             = "Build_UserFront"
-    #   category         = "Build"
-    #   owner            = "AWS"
-    #   provider         = "CodeBuild"
-    #   version          = 1
-    #   input_artifacts  = ["SourceArtifact"]
-    #   output_artifacts = ["BuildArtifact_UserFront"]
+    # user-front
+    action {
+      name             = "Build_UserFront"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = 1
+      input_artifacts  = ["SourceArtifact"]
+      output_artifacts = ["BuildArtifact_UserFront"]
 
-    #   configuration = {
-    #     ProjectName = aws_codebuild_project.user_front.id
-    #   }
-    # }
+      configuration = {
+        ProjectName = aws_codebuild_project.user_front.id
+      }
+    }
   }
 
   # ---------------------------------------------
@@ -149,59 +149,59 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
 
-    # # user-api
-    # action {
-    #   name            = "Deploy_UserApi"
-    #   category        = "Deploy"
-    #   owner           = "AWS"
-    #   provider        = "ECS"
-    #   version         = 1
-    #   input_artifacts = ["BuildArtifact_UserApi"]
+    # user-api
+    action {
+      name            = "Deploy_UserApi"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = 1
+      input_artifacts = ["BuildArtifact_UserApi"]
 
-    #   configuration = {
-    #     ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
-    #     ServiceName = "${var.project_name}-${var.environment}-user-api-app"
-    #     # 以下のFilenameにprodなどにしなくていい？
-    #     # buildspec-user-api.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
-    #     FileName = "imagedefinitions-user-api.json"
-    #   }
-    # }
+      configuration = {
+        ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
+        ServiceName = "${var.project_name}-${var.environment}-user-api-app"
+        # 以下のFilenameにprodなどにしなくていい？
+        # buildspec-user-api.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
+        FileName = "imagedefinitions-user-api.json"
+      }
+    }
 
-    # # admin-front
-    # action {
-    #   name            = "Deploy_AdminFront"
-    #   category        = "Deploy"
-    #   owner           = "AWS"
-    #   provider        = "ECS"
-    #   version         = 1
-    #   input_artifacts = ["BuildArtifact_AdminFront"]
+    # admin-front
+    action {
+      name            = "Deploy_AdminFront"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = 1
+      input_artifacts = ["BuildArtifact_AdminFront"]
 
-    #   configuration = {
-    #     ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
-    #     ServiceName = "${var.project_name}-${var.environment}-admin-front-app"
-    #     # 以下のFilenameにprodなどにしなくていい？
-    #     # buildspec-admin-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
-    #     FileName = "imagedefinitions-admin-front.json"
-    #   }
-    # }
+      configuration = {
+        ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
+        ServiceName = "${var.project_name}-${var.environment}-admin-front-app"
+        # 以下のFilenameにprodなどにしなくていい？
+        # buildspec-admin-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
+        FileName = "imagedefinitions-admin-front.json"
+      }
+    }
 
-    # # user-front
-    # action {
-    #   name            = "Deploy_UserFront"
-    #   category        = "Deploy"
-    #   owner           = "AWS"
-    #   provider        = "ECS"
-    #   version         = 1
-    #   input_artifacts = ["BuildArtifact_UserFront"]
+    # user-front
+    action {
+      name            = "Deploy_UserFront"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      version         = 1
+      input_artifacts = ["BuildArtifact_UserFront"]
 
-    #   configuration = {
-    #     ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
-    #     ServiceName = "${var.project_name}-${var.environment}-user-front-app"
-    #     # 以下のFilenameにprodなどにしなくていい？
-    #     # buildspec-user-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
-    #     FileName = "imagedefinitions-user-front.json"
-    #   }
-    # }
+      configuration = {
+        ClusterName = "${var.project_name}-${var.environment}-ecs-cluster"
+        ServiceName = "${var.project_name}-${var.environment}-user-front-app"
+        # 以下のFilenameにprodなどにしなくていい？
+        # buildspec-user-front.ymlは環境ごとに依存せず共通で使用したいのでprodなどは入れたくない
+        FileName = "imagedefinitions-user-front.json"
+      }
+    }
   }
 }
 
