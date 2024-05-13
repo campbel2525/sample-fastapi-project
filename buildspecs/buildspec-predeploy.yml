@@ -1,25 +1,25 @@
-version: 0.2
-env:
-  shell: bash
-  parameter-store:
-    SSM_ENV_VALUE: "/ecs/${PROJECT_NAME}/${ENVIRONMENT}/${APP_NAME}/.env"
+# version: 0.2
+# env:
+#   shell: bash
+#   parameter-store:
+#     SSM_ENV_VALUE: "/ecs/${PROJECT_NAME}/${ENVIRONMENT}/${APP_NAME}/.env"
 
-phases:
-  build:
-    commands:
-      - echo "copy env..."
-      - echo "${SSM_ENV_VALUE}" > apps/${APP_NAME}/.env
-      - echo apps/${APP_NAME}/.env
+# phases:
+#   build:
+#     commands:
+#       - echo "copy env..."
+#       - echo "${SSM_ENV_VALUE}" > apps/${APP_NAME}/.env
+#       - echo apps/${APP_NAME}/.env
 
-      - echo "Building the Docker image..."
-      - DOCKER_BUILDKIT=1 docker build -f apps/${APP_NAME}/docker/aws/migration/Dockerfile . -t ${APP_NAME}
+#       - echo "Building the Docker image..."
+#       - DOCKER_BUILDKIT=1 docker build -f apps/${APP_NAME}/docker/aws/migration/Dockerfile . -t ${APP_NAME}
 
-      - echo "Running migrations..."
-      - docker run ${APP_NAME}
+#       - echo "Running migrations..."
+#       - docker run ${APP_NAME}
 
-artifacts:
-  files:
-    - "**/*"
+# artifacts:
+#   files:
+#     - "**/*"
 
 
 # # ecrにビルド済みのものをecsで起動してマイグレーションを実行用にした方がいいかもしれない
@@ -41,3 +41,27 @@ artifacts:
 #     aws ecs wait tasks-stopped \
 #       --cluster ${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-ecs-cluster \
 #       --tasks $MIGRATION_TASK_ID
+
+
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login-password --region ${{ AWS_REGION }}) | docker login --username AWS --password-stdin ${{ AWS_ACCOUNT_ID }}.dkr.ecr.${{ AWS_REGION }}.amazonaws.com
+  build:
+    commands:
+      - echo Pulling Docker image from ECR...
+      - docker pull ${{ AWS_ACCOUNT_ID }}.dkr.ecr.${{ AWS_REGION }}.amazonaws.com/${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app:latest
+      - echo Running migration script...
+      - docker run ${{ AWS_ACCOUNT_ID }}.dkr.ecr.${{ AWS_REGION }}.amazonaws.com/${{ env.PROJECT_NAME }}-${{ env.ENVIRONMENT }}-admin-api-app:latest pipenv run alembic upgrade head
+  post_build:
+    commands:
+      - echo Migration completed.
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes

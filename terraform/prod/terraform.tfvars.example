@@ -28,10 +28,6 @@ aws_route53_record_zone_id = ""
 tokyo_cert_arn    = ""
 virginia_cert_arn = ""
 
-# aws lb listener
-aws_lb_listener_http_arn  = ""
-aws_lb_listener_https_arn = ""
-
 # app name
 admin_api_name   = "admin-api"
 user_api_name    = "user-api"

@@ -41,6 +41,11 @@ resource "aws_codebuild_project" "predploy" {
       name  = "AWS_ACCOUNT_ID"
       value = var.aws_account_id
     }
+
+    environment_variable {
+      name  = "AWS_REGION"
+      value = var.aws_region
+    }
   }
 
   vpc_config {
