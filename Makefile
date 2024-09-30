@@ -176,7 +176,7 @@ push: ## push
 	git add .
 	git commit -m "Commit at $$(date +'%Y-%m-%d %H:%M:%S')"
 	git push origin main
-	git push origin main:prod
+# git push origin main:prod
 
 github-init:
 # ビルド
