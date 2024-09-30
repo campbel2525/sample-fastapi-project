@@ -1,0 +1,31 @@
+version: 0.2
+phases:
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo "setting variables..."
+      - APP_REPO_NAME=${APP_NAME}-app
+      - REPOSITORY_URI_APP=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_REPO_NAME}
+
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+  build:
+    on-failure: ABORT
+    commands:
+      - echo "build..."
+      - DOCKER_BUILDKIT=1 docker build -t ${REPOSITORY_URI_APP}:original -f docker/aws/${APP_NAME}/python/Dockerfile .
+
+      - echo "docker tag..."
+      - docker tag ${REPOSITORY_URI_APP}:original ${REPOSITORY_URI_APP}:${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - docker tag ${REPOSITORY_URI_APP}:original ${REPOSITORY_URI_APP}:latest
+
+  post_build:
+    commands:
+      - echo "push to ECR..."
+      - docker push ${REPOSITORY_URI_APP}:${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - docker push ${REPOSITORY_URI_APP}:latest
+
+      - echo "Writing image definitions file..."
+      - printf '[{"name":"%s","imageUri":"%s"}]' ${APP_REPO_NAME} ${REPOSITORY_URI_APP}:${CODEBUILD_RESOLVED_SOURCE_VERSION} > imagedefinitions-${APP_NAME}.json
+artifacts:
+  files: imagedefinitions-${APP_NAME}.json

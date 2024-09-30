@@ -1,0 +1,10 @@
+.env
+.env.testing
+*.pyc
+__pycache__
+.python-version
+.DS_Store
+.venv
+.mypy_cache
+.flake8
+!/docker/local/.env

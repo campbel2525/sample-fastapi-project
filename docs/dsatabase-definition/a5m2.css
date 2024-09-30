@@ -1,0 +1,184 @@
+﻿body {
+	font-family: "游ゴシック", "ＭＳ Ｐゴシック","sans-serif";
+	font-size: 9pt;
+	color: #332211;
+}
+h1 {
+	font-size: 12pt;
+	font-weight: bold;
+	margin-left: 10px;
+}
+table { 
+	background-color: #fdfefc;
+	border: thin solid #aaaaaa;
+	border-spacing: 0;
+	border-collapse: separate;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+table caption {
+	font-size: 9pt;
+	font-weight: bold;
+	text-align: left;
+}
+table tbody tr th {
+	border: thin solid #aaaaaa;
+	font-weight: bold;
+	background-color: #87E7AD;
+	text-align:left;
+	font-size: 9pt;
+	word-break: break-word;
+	padding: 3px;
+}
+table tbody tr td { 
+	border: thin solid #aaaaaa;
+	font-size: 9pt;
+	word-break: break-word;
+	padding: 3px;
+}
+pre {
+	text-wrap: wrap;
+}
+
+table tbody tr:first-child th:first-child{
+	border-top-left-radius:4px; 
+}
+table tbody tr:first-child th:last-child{
+	border-top-right-radius:4px; 
+}
+table tbody tr:last-child th:first-child{
+	border-bottom-left-radius:4px; 
+}
+table tbody tr:last-child th:last-child{
+	border-bottom-right-radius:4px; 
+}
+table tbody tr:first-child td:last-child{
+	border-top-right-radius:4px; 
+}
+table tbody tr:last-child td:first-child{
+	border-bottom-left-radius:4px; 
+}
+table tbody tr:last-child td:last-child{
+	border-bottom-right-radius:4px; 
+}
+
+iframe {
+	border: none solid #fffff;
+}
+
+.split {
+	position: absolute;
+	height: 100%;
+}
+
+.left-box {
+	top: 0px;
+	width: 350px;
+	overflow-y: auto;
+	background-color: #efefe8;
+}
+.right-box {
+	top: 0px;
+	left: 370px;
+	width: -webkit-calc(100% - 370px);
+	width: calc(100% - 370px);
+}
+
+.menu-tableinfo {
+	border: thin solid #aaaaaa;
+	background-color: #eeeeee;
+	margin-left: 10px;
+	margin-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 300px;
+	border-radius:4px;
+}
+.menu-tableinfo:hover {
+	background-color: #87E7AD;
+}
+.menu-tableinfo-no {
+	display: inline;
+}
+.menu-tableinfo-no:before {
+	content: "[";
+}
+.menu-tableinfo-no:after {
+	content: "]";
+}
+.menu-tableinfo-pname {
+	display: inline;
+	overflow-wrap: break-word;
+}
+.menu-tableinfo-type {
+	display: inline;
+	color: #FFFFFF;
+	background-color: #FF9900;
+	border: thin solid #FFF500;
+	border-radius:3px; 
+	padding-left: 3px;
+	padding-right: 3px;
+	overflow-wrap: break-word;
+}
+.menu-tableinfo-type:empty {
+	display: none;
+}
+.menu-tableinfo-lname {
+	text-align: right;
+	color: #2F9060;
+	overflow-wrap: break-word;
+}
+.menu-tableinfo-lname:empty:before {
+	content: "\00A0";
+}
+
+.menu-domaininfo {
+	border: thin solid #aaaaaa;
+	background-color: #eeeeee;
+	margin-left: 10px;
+	margin-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 300px;
+	height: 3em;
+	border-radius:4px;
+}
+.menu-domaininfo:hover {
+	background-color: #87E7AD;
+}
+.menu-domaininfo-caption {
+}
+
+.undecoration-link { 
+	text-decoration: none;
+	color: #332211;
+}
+.undecoration-link:hover { 
+	text-decoration: none;
+	color: #332211;
+}
+
+.number-format { 
+	text-align: right;
+}
+
+.tableinfo-caption { 
+	position: fixed;
+	width: 100%;
+	top: 0px;
+	height: 40px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: white;
+	border-bottom: solid 1px #cccccc;
+}
+.tableinfo-caption th { 
+	padding: 10px;
+}
+.tableinfo-caption td { 
+	padding: 10px;
+}
+.tableinfo-caption-stuffing { 
+	height: 60px;
+}

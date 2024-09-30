@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  terraform:
+    restart: "no"
+    tty: true
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/project
+      - ./credentials/aws/config:/root/.aws/config
+    working_dir: /project

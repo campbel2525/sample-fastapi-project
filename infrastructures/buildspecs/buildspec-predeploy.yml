@@ -1,0 +1,27 @@
+version: 0.2
+env:
+  shell: bash
+  parameter-store:
+    SSM_ENV_VALUE: "/ecs/app/${APP_NAME}/.env"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+  build:
+    commands:
+      - echo Pulling Docker image from ECR...
+      - docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}-app:latest
+      - echo Running migration script...
+      - echo "${SSM_ENV_VALUE}" > .env
+      - cat .env
+      - sed -i 's/"//g' .env  # ダブルクオートを削除
+      - docker run --env-file .env ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}-app:latest pipenv run alembic upgrade head
+  post_build:
+    commands:
+      - echo Migration completed.
+
+artifacts:
+  files:
+    - '**/*'

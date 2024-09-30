@@ -1,0 +1,6 @@
+
+domain             = ""
+admin_api_domain   = ""
+admin_front_domain = ""
+user_api_domain    = ""
+user_front_domain  = ""

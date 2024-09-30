@@ -1,0 +1,20 @@
+domain = ""
+
+aws_region = ""
+
+#東京リージョンのelbのアカウントIDのため固定
+aws_tokyo_elb_account_id = "582318560864"
+
+# プロジェクトごとの設定
+db_name = "prod_ps_db"
+
+# github
+github_owner                     = ""
+github_token                     = ""
+github_target_repository         = ""
+github_target_branch             = ""
+github_repository_webhook_secret = "" # ランダムな文字列
+aws_codepipeline_webhook_secret  = "" # ランダムな文字列
+
+# acm arn 後ほど設定
+tokyo_cert_arn = ""

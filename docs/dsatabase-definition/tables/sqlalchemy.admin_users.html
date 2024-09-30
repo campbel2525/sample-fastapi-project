@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+		<title>テーブル定義書&#32;sample-project</title>
+		<link rel="stylesheet" href="a5m2.css">
+	</head>
+	<body>
+	<div class="tableinfo-caption" style="width: 912px;">
+		<table>
+			<colgroup>
+				<col width="300">
+				<col width="300">
+			</colgroup>
+			<tr>
+			<th></th>
+			<td>sqlalchemy . admin_users</td>
+			</tr>
+		</table>
+	</div>
+	<div class="tableinfo-caption-stuffing"></div>
+
+	<table>
+		<caption>テーブル情報</caption>
+			<colgroup>
+				<col width="150">
+				<col width="305">
+				<col width="150">
+				<col width="305">
+			</colgroup>
+			<th>システム名</th>
+			<td>sample-project</td>
+			<th>作成者</th>
+			<td></td>
+		</tr>
+		<tr>
+			<th>サブシステム名</th>
+			<td></td>
+			<th>作成日</th>
+			<td>2024/8/19</td>
+		</tr>
+		<tr>
+			<th>RDBMS</th>
+			<td colspan="3"> 8.0.32</td>
+		</tr>
+		<tr>
+			<td colspan="4"><b>備考</b><br></td>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>カラム情報</caption>
+			<colgroup>
+				<col width="30">
+				<col width="170">
+				<col width="170">
+				<col width="200">
+				<col width="80">
+				<col width="120">
+				<col width="140">
+			</colgroup>
+		<tr>
+			<th>No.</th>
+			<th>論理名</th>
+			<th>物理名</th>
+			<th>データ型</th>
+			<th>Not Null</th>
+			<th>デフォルト</th>
+			<th>備考</th>
+		</tr>
+		<tr>
+			<td class="number-format">1</td>
+			<td></td>
+			<td>id</td>
+			<td>bigint&#32;auto_increment</td>
+			<td>Yes (PK)</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">2</td>
+			<td></td>
+			<td>email</td>
+			<td>varchar(255)</td>
+			<td>Yes</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">3</td>
+			<td></td>
+			<td>password</td>
+			<td>varchar(255)</td>
+			<td>Yes</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">4</td>
+			<td></td>
+			<td>is_active</td>
+			<td>tinyint(1)</td>
+			<td>Yes</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">5</td>
+			<td></td>
+			<td>name</td>
+			<td>varchar(255)</td>
+			<td>Yes</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">6</td>
+			<td></td>
+			<td>created_at</td>
+			<td>datetime</td>
+			<td>Yes</td>
+			<td>CURRENT_TIMESTAMP</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">7</td>
+			<td></td>
+			<td>updated_at</td>
+			<td>datetime&#32;on&#32;update&#32;CURRENT_TIMESTAMP</td>
+			<td>Yes</td>
+			<td>CURRENT_TIMESTAMP</td>
+			<td></td>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>インデックス情報</caption>
+			<colgroup>
+				<col width="30">
+				<col width="170">
+				<col width="170">
+				<col width="70">
+				<col width="470">
+			</colgroup>
+		<tr>
+			<th>No.</th>
+			<th>インデックス名</th>
+			<th>カラムリスト</th>
+			<th>ユニーク</th>
+			<th>オプション</th>
+		</tr>
+		<tr>
+			<td class="number-format">1</td>
+			<td>PRIMARY</td>
+			<td>id</td>
+			<td>Yes</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">2</td>
+			<td>email</td>
+			<td>email</td>
+			<td>制約</td>
+			<td></td>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>制約情報</caption>
+			<colgroup>
+				<col width="30">
+				<col width="170">
+				<col width="170">
+				<col width="540">
+			</colgroup>
+		<tr>
+			<th>No.</th>
+			<th>制約名</th>
+			<th>種類</th>
+			<th>制約定義</th>
+		</tr>
+		<tr>
+			<td class="number-format">1</td>
+			<td>PRIMARY</td>
+			<td>PRIMARY&#32;KEY</td>
+			<td>id</td>
+		</tr>
+		<tr>
+			<td class="number-format">2</td>
+			<td>email</td>
+			<td>UNIQUE</td>
+			<td>email</td>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>外部キー情報</caption>
+			<colgroup>
+				<col width="30">
+				<col width="170">
+				<col width="170">
+				<col width="170">
+				<col width="170">
+				<col width="100">
+				<col width="100">
+			</colgroup>
+			<th>No.</th>
+			<th>外部キー名</th>
+			<th>カラムリスト</th>
+			<th>参照先</th>
+			<th>参照先カラムリスト</th>
+			<th>ON DELETE</th>
+			<th>ON UPDATE</th>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>外部キー情報(PK側)</caption>
+			<colgroup>
+				<col width="30">
+				<col width="170">
+				<col width="170">
+				<col width="170">
+				<col width="170">
+				<col width="100">
+				<col width="100">
+			</colgroup>
+		<tr>
+			<th>No.</th>
+			<th>外部キー名</th>
+			<th>カラムリスト</th>
+			<th>参照元</th>
+			<th>参照元カラムリスト</th>
+			<th>ON DELETE</th>
+			<th>ON UPDATE</th>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>トリガー情報</caption>
+			<colgroup>
+				<col width="30">
+				<col width="170">
+				<col width="170">
+				<col width="170">
+				<col width="370">
+			</colgroup>
+			<th>No.</th>
+			<th>トリガー名</th>
+			<th>イベント</th>
+			<th>タイミング</th>
+			<th>条件</th>
+		</tr>
+	</table>
+
+<br>
+	<table>
+		<caption>RDBMS固有の情報</caption>
+			<colgroup>
+				<col width="30">
+				<col width="250">
+				<col width="630">
+			</colgroup>
+		<tr>
+			<th>No.</th>
+			<th>プロパティ名</th>
+			<th>プロパティ値</th>
+		</tr>
+		<tr>
+			<td class="number-format">1</td>
+			<td>TABLE_CATALOG</td>
+			<td>def</td>
+		</tr>
+		<tr>
+			<td class="number-format">2</td>
+			<td>TABLE_SCHEMA</td>
+			<td>sqlalchemy</td>
+		</tr>
+		<tr>
+			<td class="number-format">3</td>
+			<td>TABLE_NAME</td>
+			<td>admin_users</td>
+		</tr>
+		<tr>
+			<td class="number-format">4</td>
+			<td>TABLE_TYPE</td>
+			<td>BASE&#32;TABLE&#32;</td>
+		</tr>
+		<tr>
+			<td class="number-format">5</td>
+			<td>ENGINE</td>
+			<td>InnoDB</td>
+		</tr>
+		<tr>
+			<td class="number-format">6</td>
+			<td>VERSION</td>
+			<td>10</td>
+		</tr>
+		<tr>
+			<td class="number-format">7</td>
+			<td>ROW_FORMAT</td>
+			<td>Dynamic&#32;&#32;&#32;</td>
+		</tr>
+		<tr>
+			<td class="number-format">8</td>
+			<td>TABLE_ROWS</td>
+			<td>1</td>
+		</tr>
+		<tr>
+			<td class="number-format">9</td>
+			<td>AVG_ROW_LENGTH</td>
+			<td>16384</td>
+		</tr>
+		<tr>
+			<td class="number-format">10</td>
+			<td>DATA_LENGTH</td>
+			<td>16384</td>
+		</tr>
+		<tr>
+			<td class="number-format">11</td>
+			<td>MAX_DATA_LENGTH</td>
+			<td>0</td>
+		</tr>
+		<tr>
+			<td class="number-format">12</td>
+			<td>INDEX_LENGTH</td>
+			<td>16384</td>
+		</tr>
+		<tr>
+			<td class="number-format">13</td>
+			<td>DATA_FREE</td>
+			<td>0</td>
+		</tr>
+		<tr>
+			<td class="number-format">14</td>
+			<td>AUTO_INCREMENT</td>
+			<td>2</td>
+		</tr>
+		<tr>
+			<td class="number-format">15</td>
+			<td>CREATE_TIME</td>
+			<td>2024/8/19&#32;0:28:24</td>
+		</tr>
+		<tr>
+			<td class="number-format">16</td>
+			<td>UPDATE_TIME</td>
+			<td>2024/8/19&#32;0:28:26</td>
+		</tr>
+		<tr>
+			<td class="number-format">17</td>
+			<td>CHECK_TIME</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">18</td>
+			<td>TABLE_COLLATION</td>
+			<td>utf8mb4_0900_ai_ci</td>
+		</tr>
+		<tr>
+			<td class="number-format">19</td>
+			<td>CHECKSUM</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">20</td>
+			<td>CREATE_OPTIONS</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="number-format">21</td>
+			<td>TABLE_COMMENT</td>
+			<td></td>
+		</tr>
+	</table>
+
+
+	</body>
+</html>
