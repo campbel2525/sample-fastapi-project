@@ -171,27 +171,6 @@ profile settings > Developer Settings > Personal access tokens > tokens (classic
   - Administration: Read and writer
   - Webhooks: Read and writer
 
-## 今後の課題
-
-1.  下記の内容を要調査する
-
-- iam の権限の絞り込み
-- role の権限の絞り込み
-- github 連携をもっといい感じにできる？
-
-2. vpc エンドポイントの再考察
-   現状設定している vpc エンドポイントは ecr.dkr, ecr.api, s3 の 3 つのみです。 他にも logs, secretsmanager, ssm, ssmmessages の vpc エンドポイントもあるようです
-   よく要検討すること
-   参考 url
-   https://dev.classmethod.jp/articles/vpc-endpoints-for-ecs-2022/
-   https://qiita.com/ldr/items/7c8bc08baca1945fdb50
-
-3. 現状は prod しかないが stg 環境も作る。マルチ環境は terraform どう作るか考える
-   参考 url
-   https://qiita.com/poly_soft/items/c71bb763035b2047d2db
-
-4. app から rds への接続はパスワードではなく iam ベースに変更する
-
 # コマンドメモ
 
 ```
