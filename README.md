@@ -174,13 +174,13 @@ npm install xxx
 ### マイグレーション作成
 
 ```
-pipenv run alembic revision --autogenerate -m 'comment'
+pipenv run python manage.py makemigrations
 ```
 
 ### マイグレート
 
 ```
-pipenv run alembic upgrade head
+pipenv run python manage.py migrate
 ```
 
 もしくは
